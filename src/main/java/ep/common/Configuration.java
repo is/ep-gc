@@ -12,27 +12,4 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Configuration {
   public String root;
 
-  public static Configuration load(File filePath) throws IOException {
-    FileInputStream fis = new FileInputStream(filePath);
-    String json = null;
-
-    try {
-      FileChannel fc = fis.getChannel();
-      MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
-      json = Charset.forName("utf-8").decode(bb).toString();
-    } finally {
-      fis.close();
-    }
-
-    if (json == null)
-      return null;
-
-    return load(json);
-  }
-
-  public static Configuration load(String json) throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    Configuration cf = (Configuration)mapper.readValue(json, Configuration.class);
-    return cf;
-  }
 }
