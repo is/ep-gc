@@ -12,6 +12,10 @@ public class Gridding {
   public float resLon;
   public float resLat;
 
+  public long getSize() {
+    return surface.getSize();
+  }
+
   public Array getSurface() {
     return surface;
   }
@@ -27,6 +31,8 @@ public class Gridding {
   public Index getIndex() {
     return surface.getIndex();
   }
+
+
 
   public void globalize() {
     baseLon = 0;
@@ -61,5 +67,21 @@ public class Gridding {
     Gridding ng = cloneWithProperties();
     ng.surface = surface.copy();
     return ng;
+  }
+
+
+  public void floatPlus(Gridding g) {
+    if (g.getSize() != getSize()) {
+      throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
+    }
+
+    long size = getSize();
+
+    float[] addend = (float[])g.getSurface().getStorage();
+    float[] augend = (float[])surface.getStorage();
+
+    for (int i = 0; i < size; ++i) {
+      augend[i] += addend[i];
+    }
   }
 }
