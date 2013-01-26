@@ -36,4 +36,30 @@ public class Gridding {
     resLat = 180.0f / shape[0];
     resLon = 360.0f / shape[1];
   }
+
+
+  private Gridding cloneWithProperties() {
+    Gridding ng = new Gridding();
+
+    ng.baseLat = baseLat;
+    ng.baseLon = baseLon;
+
+    ng.resLat = resLat;
+    ng.resLon = resLon;
+
+    return ng;
+  }
+
+
+  public Gridding empty() {
+    Gridding ng = cloneWithProperties();
+    ng.surface = Array.factory(surface.getElementType(), surface.getShape());
+    return ng;
+  }
+
+  public Gridding copy() {
+    Gridding ng = cloneWithProperties();
+    ng.surface = surface.copy();
+    return ng;
+  }
 }
