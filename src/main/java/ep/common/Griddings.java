@@ -2,16 +2,10 @@ package ep.common;
 
 
 import java.io.IOException;
-import java.util.Map;
 
 import ucar.ma2.Array;
-import ucar.ma2.DataType;
 import ucar.ma2.InvalidRangeException;
-import ucar.nc2.Attribute;
-import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
-import ucar.nc2.NetcdfFileWriter;
-import ucar.nc2.Variable;
 
 public class Griddings {
 
