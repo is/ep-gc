@@ -84,4 +84,10 @@ public class Gridding {
       augend[i] += addend[i];
     }
   }
+
+  public Gridding remap(int lat, int lon) {
+    Gridding g = Griddings.empty(float.class, lat, lon);
+    Griddings.remap(g, this);
+    return g;
+  }
 }

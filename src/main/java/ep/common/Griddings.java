@@ -29,7 +29,7 @@ public class Griddings {
   }
 
 
-  public void remap(Gridding source, Gridding dest) {
+  public static void remap(Gridding source, Gridding dest) {
     // Very simple & ugly remap function.
     // Only work on Globe surface combination
     Array srcSur = source.getSurface();
