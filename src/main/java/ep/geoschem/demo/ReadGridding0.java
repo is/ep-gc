@@ -5,6 +5,7 @@ import ep.common.Griddings;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
 import ucar.nc2.NetcdfFile;
+import ucar.nc2.NetcdfFileWriter;
 
 public class ReadGridding0 {
   public static void main(String args[]) throws Exception {
@@ -19,7 +20,10 @@ public class ReadGridding0 {
       System.out.println(i + ":" + shape[i]);
     }
 
+    System.out.println(Float.class.getName());
     System.out.println(arr.getElementType().getName());
+    System.out.println(arr.getElementType());
+    System.out.println(float.class.getName());
     System.out.println(arr.getFloat(1800 * 3600 - 1));
     System.out.println(arr.getFloat(1));
 
@@ -29,5 +33,15 @@ public class ReadGridding0 {
 
     g.globalize();
     System.out.println(g.resLat);
+
+    Gridding ng;
+    ng = Griddings.empty(float.class, 360, 540);
+    Griddings.remap(g, ng);
+
+    NetcdfFileWriter writer = Griddings.createNetCDF("test.nc");
+    Griddings.standardizeCF(writer, ng.getShape());
+    writer.create();
+    Griddings.writeDimensionVariable(writer, ng.getShape());
+    writer.close();
   }
 }

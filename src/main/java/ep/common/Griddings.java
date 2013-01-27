@@ -148,9 +148,15 @@ public class Griddings {
     lonVar.addAttribute(new Attribute("long_name", "longitude"));
     lonVar.addAttribute(new Attribute("units", "degrees_east"));
     lonVar.addAttribute(new Attribute("comment", "center_of_cell"));
+  }
 
-    ncwriter.create();
 
+  public static void writeDimensionVariable(NetcdfFileWriter ncwriter, int shape[]) throws IOException, InvalidRangeException {
+    int resLat = shape[0];
+    int resLon = shape[1];
+
+    Variable latVar = ncwriter.findVariable("lat");
+    Variable lonVar = ncwriter.findVariable("lon");
 
     Array latArr = Array.factory(float.class, new int[] {resLat});
     float[] latArr2 = (float[])latArr.getStorage();
