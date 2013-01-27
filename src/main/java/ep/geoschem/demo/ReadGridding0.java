@@ -1,6 +1,7 @@
 package ep.geoschem.demo;
 
 import ep.common.Gridding;
+import ep.common.GriddingSet;
 import ep.common.Griddings;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
@@ -38,10 +39,10 @@ public class ReadGridding0 {
     ng = Griddings.empty(float.class, 360, 540);
     Griddings.remap(g, ng);
 
-    NetcdfFileWriter writer = Griddings.createNetCDF("test.nc");
-    Griddings.standardizeCF(writer, ng.getShape());
-    writer.create();
-    Griddings.writeDimensionVariable(writer, ng.getShape());
-    writer.close();
+
+    GriddingSet gs = new GriddingSet("test2.nc", ng.getShape());
+    gs.open();
+    gs.addGridding("s0", null, ng);
+    gs.flushAndClose();
   }
 }
