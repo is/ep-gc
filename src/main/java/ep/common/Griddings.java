@@ -13,6 +13,18 @@ public class Griddings {
 
     Gridding g = new Gridding();
     g.setSurface(array);
+    g.globalize();
+    return g;
+  }
+
+
+  public static Gridding empty(Class typeClass, int lat, int lon) {
+    int shape[] = new int[] {lat, lon};
+    Array surface = Array.factory(typeClass, shape);
+    Gridding g = new Gridding();
+
+    g.setSurface(surface);
+    g.globalize();
     return g;
   }
 }
