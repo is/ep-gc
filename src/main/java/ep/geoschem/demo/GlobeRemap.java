@@ -56,5 +56,13 @@ public class GlobeRemap {
     System.out.println("4 -> 3");
     csr = PolarCoordinateRegrid.buildCellSplitReference(4, 3);
     dumpCellSplitReference(csr);
+
+    System.out.println("4 -> 4");
+    csr = PolarCoordinateRegrid.buildCellSplitReference(4, 4);
+    dumpCellSplitReference(csr);
+
+    System.out.println("4 -> 2");
+    csr = PolarCoordinateRegrid.buildCellSplitReference(4, 2);
+    dumpCellSplitReference(csr);
   }
 }
