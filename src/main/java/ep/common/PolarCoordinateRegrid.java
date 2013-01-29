@@ -68,6 +68,24 @@ public class PolarCoordinateRegrid {
 //    }
 //  }
 
+  static int GCD(int n, int m) {
+    int i;
+    if (m > n) {
+      i = n;
+      n = m;
+      m = i;
+    }
+
+    while (true) {
+      int z = n % m;
+      if (z == 0) {
+        return m;
+      }
+
+      n = m;
+      m = z;
+    }
+  }
 
   public void setup() {
     latCSR = buildCellSplitReference(si.latRes, di.latRes);
@@ -82,9 +100,6 @@ public class PolarCoordinateRegrid {
     sLonFactor = new double[si.lonRes];
     dLatFactor = new double[di.latRes];
     dLonFactor = new double[di.lonRes];
-
-    // cellLatFactor = new double[latCSR.P];
-    // cellLonFactor = new double[lonCSR.P];
 
     int i;
     int offset;
@@ -172,12 +187,15 @@ public class PolarCoordinateRegrid {
       mode = SPLIT_MODE;
     }
 
+    int gcd = GCD(sRes, dRes);
 
-    long nextBase;
-    long sDiff = dRes;
-    long dDiff = sRes;
-    long sBase = sDiff;
-    long dBase = dDiff;
+    int nextBase;
+    int sDiff = dRes / gcd;
+    int dDiff = sRes / gcd;
+    int sBase = sDiff;
+    int dBase = dDiff;
+
+    int limitP = (sDiff + dDiff - 1) * gcd;
 
     int P = 0;
     int sP = 0;
@@ -185,10 +203,14 @@ public class PolarCoordinateRegrid {
 
     int bigRes = Math.max(sRes, dRes);
 
-    int sRef[] = new int[bigRes * 2];
-    int dRef[] = new int[bigRes * 2];
-    int smallBorder[] = new int[bigRes * 2];
-    int bigBorder[] = new int[bigRes * 2];
+//    int sRef[] = new int[bigRes * 2];
+//    int dRef[] = new int[bigRes * 2];
+//    int smallBorder[] = new int[bigRes * 2];
+//    int bigBorder[] = new int[bigRes * 2];
+    int sRef[] = new int[limitP];
+    int dRef[] = new int[limitP];
+    int smallBorder[] = new int[limitP];
+    int bigBorder[] = new int[limitP];
     int dCells[] = new int[dRes];
 
     int border;
@@ -278,16 +300,22 @@ public class PolarCoordinateRegrid {
     csr.sRes = sRes;
     csr.dRes = dRes;
     csr.mode = mode;
-    csr.bigBorder = new int[P];
-    csr.smallBorder = new int[P];
-    csr.dRef = new int[P];
-    csr.sRef = new int[P];
-    csr.dCells = dCells;
 
-    System.arraycopy(sRef, 0, csr.sRef, 0, P);
-    System.arraycopy(dRef, 0, csr.dRef, 0, P);
-    System.arraycopy(bigBorder, 0, csr.bigBorder, 0, P);
-    System.arraycopy(smallBorder, 0, csr.smallBorder, 0, P);
+    csr.dCells = dCells;
+    csr.bigBorder = bigBorder;
+    csr.smallBorder = smallBorder;
+    csr.sRef = sRef;
+    csr.dRef = dRef;
+
+//    csr.bigBorder = new int[P];
+//    csr.smallBorder = new int[P];
+//    csr.dRef = new int[P];
+//    csr.sRef = new int[P];
+//
+//    System.arraycopy(sRef, 0, csr.sRef, 0, P);
+//    System.arraycopy(dRef, 0, csr.dRef, 0, P);
+//    System.arraycopy(bigBorder, 0, csr.bigBorder, 0, P);
+//    System.arraycopy(smallBorder, 0, csr.smallBorder, 0, P);
     return csr;
   }
 }

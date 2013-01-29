@@ -44,12 +44,12 @@ public class GlobeRemap {
 
 
   public static void main(String args[]) {
-    // test1(3, 4);
-    // test1(3, 5);
-    // test1(6, 15);
-    // test1(10, 15);
-    // test1(15, 10);
-    // test1(360, 420);
+    test1(3, 4);
+    test1(3, 5);
+    test1(6, 15);
+    test1(10, 15);
+    test1(15, 10);
+    test1(360, 420);
     // test0(3, 4);
     // test0(4, 2);
     // test0(3, 9);
