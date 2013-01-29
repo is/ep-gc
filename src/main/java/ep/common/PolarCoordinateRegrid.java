@@ -184,7 +184,6 @@ public class PolarCoordinateRegrid {
 //          sBase + ", dbase=" + dBase + ", P=(" + P + "," + sP + "," + dP + ")");
 
       if (border == TAG_SRC) {
-        //nextBase = base + sDiff;
         nextBase = 1.0 / sRes * (sP + 1);
 
         if (nextBase <= dBase) {
@@ -197,12 +196,8 @@ public class PolarCoordinateRegrid {
 
           ++P;
           ++sP;
-          // sBase += sDiff;
           sBase = 1.0 / sRes * (sP + 1);
-          base = nextBase;
-
           if (nextBase == dBase) {
-            //dBase += dDiff;
             ++dP;
             dBase = 1.0 /dRes * (dP + 1);
           }
@@ -218,11 +213,8 @@ public class PolarCoordinateRegrid {
         border = TAG_DST;
         ++P;
         ++dP;
-        base = dBase;
-        // dBase += dDiff;
         dBase = 1.0 / dRes *(dP + 1);
       } else {
-        // nextBase = base + dDiff;
         nextBase = 1.0 / dRes * (dP + 1);
         if (nextBase <= sBase) {
           sRef[P] = sP;
@@ -234,12 +226,9 @@ public class PolarCoordinateRegrid {
 
           ++P;
           ++dP;
-          //dBase += dDiff;
           dBase = 1.0 / dRes * (dP + 1);
-          base = nextBase;
 
           if (nextBase == sBase) {
-            // sBase += sDiff;
             ++sP;
             sBase = 1.0 / sRes * (sP + 1);
           }
@@ -254,8 +243,6 @@ public class PolarCoordinateRegrid {
         border = TAG_SRC;
         ++P;
         ++sP;
-        base = sBase;
-        //sBase += sDiff;
         sBase = 1.0 / sRes * (sP + 1);
       }
     }
