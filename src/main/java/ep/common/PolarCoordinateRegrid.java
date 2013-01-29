@@ -14,6 +14,7 @@ public class PolarCoordinateRegrid {
     }
   }
 
+
   public static class CellSplitReference {
     public int P;
 
@@ -35,15 +36,83 @@ public class PolarCoordinateRegrid {
   double latLimitPointTable[];
   double lonLimitPointTable[];
 
+  double sLatFactor[];
+  double sLonFactor[];
+  double dLatFactor[];
+  double dLonFactor[];
+  double cellLatFactor[];
+  double cellLonFactor[];
+
 
   public PolarCoordinateRegrid(int srcShape[], int dstShape[]) {
     si = new FaceInfo(srcShape);
     di = new FaceInfo(dstShape);
 
+  }
+
+  public void setup() {
     latCSR = buildCellSplitReference(si.latRes, di.latRes);
     lonCSR = buildCellSplitReference(si.lonRes, di.lonRes);
-
     buildLimitPointTable();
+    buildFactorTables();
+  }
+
+
+  void buildFactorTables() {
+    sLatFactor = new double[si.latRes];
+    sLonFactor = new double[si.lonRes];
+    dLatFactor = new double[di.latRes];
+    dLonFactor = new double[di.lonRes];
+
+    // cellLatFactor = new double[latCSR.P];
+    // cellLonFactor = new double[lonCSR.P];
+
+    int i;
+    int offset;
+
+    for (i = 0; i < si.latRes; ++i) {
+      sLatFactor[i] = latLimitPointTable[i + 1] - latLimitPointTable[i];
+    }
+    for (i = 0; i < si.lonRes; ++i) {
+      sLonFactor[i] = lonLimitPointTable[i + 1] - lonLimitPointTable[i];
+    }
+
+    for (i = 0, offset = si.latRes + 1; i < di.latRes; ++i, ++offset) {
+      dLatFactor[i] = latLimitPointTable[offset + 1] - latLimitPointTable[offset];
+    }
+
+    for (i = 0, offset = si.lonRes + 1; i < di.lonRes; ++i, ++offset) {
+      dLonFactor[i] = lonLimitPointTable[offset + 1] - lonLimitPointTable[offset];
+    }
+
+    cellLatFactor = buildCellFactorTable(latLimitPointTable, latCSR);
+    cellLonFactor = buildCellFactorTable(lonLimitPointTable, lonCSR);
+  }
+
+
+  static double[] buildCellFactorTable(double pointTable[], CellSplitReference csr) {
+    double factors[] = new double[csr.P];
+    for (int i = 0; i < csr.P; ++i) {
+      factors[i] =
+        pointTable[getCellLimitPointIndex(csr.sRes, csr.sRef[i], csr.dRef[i], csr.bigBorder[i], false)] -
+          pointTable[getCellLimitPointIndex(csr.sRes, csr.sRef[i], csr.dRef[i], csr.smallBorder[i], true)];
+    }
+    return factors;
+  }
+
+
+  static int getCellLimitPointIndex(int sRes, int sindex, int dindex, int border, boolean small) {
+    int realindex;
+
+    if (border == -1) {
+      realindex = sindex;
+    } else {
+      realindex = sRes + 1 + dindex;
+    }
+    if (!small)
+      realindex += 1;
+
+    return realindex;
   }
 
 
@@ -54,7 +123,7 @@ public class PolarCoordinateRegrid {
     double base;
     double diff;
 
-    base = - Math.PI / 2;
+    base = -Math.PI / 2;
     diff = Math.PI / si.latRes;
 
     for (int i = 0; i <= si.latRes; ++i) {
@@ -62,7 +131,7 @@ public class PolarCoordinateRegrid {
       base += diff;
     }
 
-    base = - Math.PI / 2;
+    base = -Math.PI / 2;
     diff = Math.PI / di.latRes;
     for (int i = 0; i <= di.latRes; ++i) {
       latLimitPointTable[si.latRes + 1 + i] = Math.sin(base);
@@ -126,11 +195,9 @@ public class PolarCoordinateRegrid {
     }
 
     while (sP < sRes || dP < dRes) {
-      System.out.println(
-        "border=" + border + ", base=" + base + ", sbase=" +
-          sBase + ", dbase=" + dBase + ", P=(" + P + "," + sP + "," + dP + ")");
-
-
+//      System.out.println(
+//        "border=" + border + ", base=" + base + ", sbase=" +
+//          sBase + ", dbase=" + dBase + ", P=(" + P + "," + sP + "," + dP + ")");
       if (border == TAG_SRC) {
         nextBase = base + sDiff;
         if (nextBase <= dBase) {
