@@ -1,6 +1,6 @@
 package ep.geoschem.demo;
 
-import ep.common.PolarCoordinateRegrid;
+import ep.common.PolarCoordinatesRegrid;
 
 public class GlobeRemap {
   public static void DumpArray(Object o) {
@@ -23,7 +23,7 @@ public class GlobeRemap {
   }
 
 
-  public static void dumpCellSplitReference(PolarCoordinateRegrid.CellSplitReference csr) {
+  public static void dumpCellSplitReference(PolarCoordinatesRegrid.CellSplitReference csr) {
     System.out.println("P:" + csr.P);
 
     System.out.println("Dest Cells:");
@@ -54,8 +54,8 @@ public class GlobeRemap {
     // test0(4, 2);
     // test0(3, 9);
     // test0(9, 3);
-    //test0(5, 7);
-    PolarCoordinateRegrid pcr = new PolarCoordinateRegrid(
+    // test0(5, 7);
+    PolarCoordinatesRegrid pcr = new PolarCoordinatesRegrid(
       new int[]{180, 360}, new int[]{360, 480});
     pcr.setup();
   }
@@ -64,7 +64,7 @@ public class GlobeRemap {
     System.out.println();
     System.out.println("--");
     System.out.println(n + " -> " + m);
-    dumpCellSplitReference(PolarCoordinateRegrid.buildCellSplitReference(n, m));
+    dumpCellSplitReference(PolarCoordinatesRegrid.buildCellSplitReference(n, m));
   }
 
 
@@ -72,7 +72,7 @@ public class GlobeRemap {
     System.out.println();
     System.out.println("--");
 
-    PolarCoordinateRegrid.CellSplitReference csr = PolarCoordinateRegrid.buildCellSplitReference(n, m);
+    PolarCoordinatesRegrid.CellSplitReference csr = PolarCoordinatesRegrid.buildCellSplitReference(n, m);
     System.out.println(n + " -> " + m + " = " + csr.P);
   }
 }
