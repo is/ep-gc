@@ -47,8 +47,27 @@ public class PolarCoordinateRegrid {
   public PolarCoordinateRegrid(int srcShape[], int dstShape[]) {
     si = new FaceInfo(srcShape);
     di = new FaceInfo(dstShape);
-
   }
+
+
+//  public void check() {
+//    for (int i = 0; i < latCSR.P; ++i) {
+//      if (cellLatFactor[i] <= 0) {
+//        System.out.println("error-lat " + i + ":" + cellLatFactor[i]);
+//      } else {
+//        System.out.println(i + " = " + cellLatFactor[i]);
+//      }
+//    }
+//
+//    for (int i = 0; i < lonCSR.P; ++i) {
+//      if (cellLonFactor[i] <= 0) {
+//        System.out.println("error-lat " + i + ":" + cellLonFactor[i] + "/" +  lonCSR.sRef[i] + "-" + lonCSR.dRef[i]);
+//      } else {
+//        System.out.println(i + " = " + cellLonFactor[i]);
+//      }
+//    }
+//  }
+
 
   public void setup() {
     latCSR = buildCellSplitReference(si.latRes, di.latRes);
@@ -129,11 +148,13 @@ public class PolarCoordinateRegrid {
     }
 
     for (int i = 0; i <= si.lonRes; ++i) {
-      lonLimitPointTable[i] = 2 * Math.PI / si.lonRes * i;
+      // lonLimitPointTable[i] = 2 * Math.PI / si.lonRes * i;
+      lonLimitPointTable[i] = di.lonRes * i;
     }
 
     for (int i = 0; i <= di.lonRes; ++i) {
-      lonLimitPointTable[si.lonRes + 1 + i] = 2 * Math.PI / di.lonRes * i;
+      // lonLimitPointTable[si.lonRes + 1 + i] = 2 * Math.PI / di.lonRes * i;
+      lonLimitPointTable[si.lonRes + 1 + i] = si.lonRes * i;
     }
   }
 
@@ -144,9 +165,6 @@ public class PolarCoordinateRegrid {
     int TAG_SRC = -1;
     int TAG_DST = 1;
 
-    double sDiff = 1.0 / sRes;
-    double dDiff = 1.0 / dRes;
-
     int mode;
     if (sRes > dRes) {
       mode = COMBINE_MODE;
@@ -154,10 +172,12 @@ public class PolarCoordinateRegrid {
       mode = SPLIT_MODE;
     }
 
-    double base = 0;
-    double nextBase;
-    double sBase = sDiff;
-    double dBase = dDiff;
+
+    long nextBase;
+    long sDiff = dRes;
+    long dDiff = sRes;
+    long sBase = sDiff;
+    long dBase = dDiff;
 
     int P = 0;
     int sP = 0;
@@ -184,7 +204,7 @@ public class PolarCoordinateRegrid {
 //          sBase + ", dbase=" + dBase + ", P=(" + P + "," + sP + "," + dP + ")");
 
       if (border == TAG_SRC) {
-        nextBase = 1.0 / sRes * (sP + 1);
+        nextBase = sDiff * (sP + 1);
 
         if (nextBase <= dBase) {
           sRef[P] = sP;
@@ -196,10 +216,12 @@ public class PolarCoordinateRegrid {
 
           ++P;
           ++sP;
-          sBase = 1.0 / sRes * (sP + 1);
+          //sBase = sDiff * (sP + 1);
+          sBase += sDiff;
           if (nextBase == dBase) {
             ++dP;
-            dBase = 1.0 /dRes * (dP + 1);
+            //dBase = dDiff * (dP + 1);
+            dBase += dDiff;
           }
           continue;
         }
@@ -213,9 +235,10 @@ public class PolarCoordinateRegrid {
         border = TAG_DST;
         ++P;
         ++dP;
-        dBase = 1.0 / dRes *(dP + 1);
+        //dBase = dDiff *(dP + 1);
+        dBase += dDiff;
       } else {
-        nextBase = 1.0 / dRes * (dP + 1);
+        nextBase = dDiff * (dP + 1);
         if (nextBase <= sBase) {
           sRef[P] = sP;
           dRef[P] = dP;
@@ -226,11 +249,13 @@ public class PolarCoordinateRegrid {
 
           ++P;
           ++dP;
-          dBase = 1.0 / dRes * (dP + 1);
+          //dBase = dDiff * (dP + 1);
+          dBase += dDiff;
 
           if (nextBase == sBase) {
             ++sP;
-            sBase = 1.0 / sRes * (sP + 1);
+            //sBase = sDiff * (sP + 1);
+            sBase += sDiff;
           }
           continue;
         }
@@ -243,7 +268,8 @@ public class PolarCoordinateRegrid {
         border = TAG_SRC;
         ++P;
         ++sP;
-        sBase = 1.0 / sRes * (sP + 1);
+        //sBase = sDiff * (sP + 1);
+        sBase += sDiff;
       }
     }
 

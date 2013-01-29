@@ -44,25 +44,35 @@ public class GlobeRemap {
 
 
   public static void main(String args[]) {
-    PolarCoordinateRegrid.CellSplitReference csr;
+    // test1(3, 4);
+    // test1(3, 5);
+    // test1(6, 15);
+    // test1(10, 15);
+    // test1(15, 10);
+    // test1(360, 420);
+    // test0(3, 4);
+    // test0(4, 2);
+    // test0(3, 9);
+    // test0(9, 3);
+    //test0(5, 7);
+    PolarCoordinateRegrid pcr = new PolarCoordinateRegrid(
+      new int[]{180, 360}, new int[]{360, 480});
+    pcr.setup();
+  }
 
-    System.out.println("3 -> 4");
-    csr = PolarCoordinateRegrid.buildCellSplitReference(3, 4);
-    dumpCellSplitReference(csr);
+  public static void test0(int n, int m) {
+    System.out.println();
+    System.out.println("--");
+    System.out.println(n + " -> " + m);
+    dumpCellSplitReference(PolarCoordinateRegrid.buildCellSplitReference(n, m));
+  }
 
+
+  public static void test1(int n, int m) {
     System.out.println();
     System.out.println("--");
 
-    System.out.println("4 -> 3");
-    csr = PolarCoordinateRegrid.buildCellSplitReference(4, 3);
-    dumpCellSplitReference(csr);
-
-    System.out.println("4 -> 4");
-    csr = PolarCoordinateRegrid.buildCellSplitReference(4, 4);
-    dumpCellSplitReference(csr);
-
-    System.out.println("4 -> 2");
-    csr = PolarCoordinateRegrid.buildCellSplitReference(4, 2);
-    dumpCellSplitReference(csr);
+    PolarCoordinateRegrid.CellSplitReference csr = PolarCoordinateRegrid.buildCellSplitReference(n, m);
+    System.out.println(n + " -> " + m + " = " + csr.P);
   }
 }
