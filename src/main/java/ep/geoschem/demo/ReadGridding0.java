@@ -3,6 +3,7 @@ package ep.geoschem.demo;
 import ep.common.Gridding;
 import ep.common.GriddingSet;
 import ep.common.Griddings;
+import ep.common.PolarCoordinatesRegrid;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
 import ucar.nc2.NetcdfFile;
@@ -37,8 +38,11 @@ public class ReadGridding0 {
 
     Gridding ng;
     ng = Griddings.empty(float.class, 360, 540);
-    Griddings.remap(g, ng);
+    // Griddings.remap(g, ng);
 
+    PolarCoordinatesRegrid regrid = new PolarCoordinatesRegrid(g.getShape(), ng.getShape());
+    regrid.setup();
+    regrid.extensityRegrid(g, ng);
 
     GriddingSet gs = new GriddingSet("test2.nc", ng.getShape());
     gs.open();

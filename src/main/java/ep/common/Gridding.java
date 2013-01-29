@@ -85,6 +85,8 @@ public class Gridding {
     }
   }
 
+
+  @Deprecated
   public Gridding remap(int lat, int lon) {
     Gridding g = Griddings.empty(float.class, lat, lon);
     Griddings.remap(g, this);
