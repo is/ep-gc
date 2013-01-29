@@ -50,23 +50,67 @@ public class PolarCoordinatesRegrid {
   }
 
 
-//  public void check() {
-//    for (int i = 0; i < latCSR.P; ++i) {
-//      if (cellLatFactor[i] <= 0) {
-//        System.out.println("error-lat " + i + ":" + cellLatFactor[i]);
-//      } else {
-//        System.out.println(i + " = " + cellLatFactor[i]);
-//      }
-//    }
-//
-//    for (int i = 0; i < lonCSR.P; ++i) {
-//      if (cellLonFactor[i] <= 0) {
-//        System.out.println("error-lat " + i + ":" + cellLonFactor[i] + "/" +  lonCSR.sRef[i] + "-" + lonCSR.dRef[i]);
-//      } else {
-//        System.out.println(i + " = " + cellLonFactor[i]);
-//      }
-//    }
-//  }
+  public void intensityRegrid(Gridding source, Gridding dest) {
+    float[] sArr = (float[])source.getSurface().getStorage();
+    float[] dArr = (float[])dest.getSurface().getStorage();
+
+    int clat, clon;
+
+    for (clat = 0; clat < latCSR.P; ++clat) {
+      int sLat = latCSR.sRef[clat];
+      int dLat = latCSR.dRef[clat];
+
+      int sBase = sLat * si.lonRes;
+      int dBase = dLat * di.lonRes;
+
+      double sLatF = sLatFactor[sLat];
+      double dLatF = dLatFactor[dLat];
+      double cLatF = cellLatFactor[clat];
+
+      for (clon = 0; clon < lonCSR.P; ++clon) {
+        int sLon = lonCSR.sRef[clon];
+        int dLon = lonCSR.dRef[clon];
+
+        double cLonF = cellLonFactor[clat];
+        double sLonF = sLonFactor[sLon];
+        double dLonF = sLonFactor[dLon];
+
+        dArr[dBase + dLon] += sArr[sBase + sLon] *
+          (cLatF * cLonF) / (dLatF * dLonF);
+      }
+    }
+  }
+
+  public void extensityRegrid(Gridding source, Gridding dest) {
+    float[] sArr = (float[])source.getSurface().getStorage();
+    float[] dArr = (float[])dest.getSurface().getStorage();
+
+    int clat, clon;
+
+    for (clat = 0; clat < latCSR.P; ++clat) {
+      int sLat = latCSR.sRef[clat];
+      int dLat = latCSR.dRef[clat];
+
+      int sBase = sLat * si.lonRes;
+      int dBase = dLat * di.lonRes;
+
+      double sLatF = sLatFactor[sLat];
+      double dLatF = dLatFactor[dLat];
+      double cLatF = cellLatFactor[clat];
+
+      for (clon = 0; clon < lonCSR.P; ++clon) {
+        int sLon = lonCSR.sRef[clon];
+        int dLon = lonCSR.dRef[clon];
+
+        double cLonF = cellLonFactor[clat];
+        double sLonF = sLonFactor[sLon];
+        double dLonF = sLonFactor[dLon];
+
+        dArr[dBase + dLon] += sArr[sBase + sLon] *
+          (cLatF * cLonF) / (sLatF * sLonF);
+      }
+    }
+  }
 
   static int GCD(int n, int m) {
     int i;
