@@ -1,6 +1,6 @@
 package ep.common;
 
-public class PolarCoordinateRegrid {
+public class PolarCoordinatesRegrid {
   public static class FaceInfo {
     int shape[];
 
@@ -44,7 +44,7 @@ public class PolarCoordinateRegrid {
   double cellLonFactor[];
 
 
-  public PolarCoordinateRegrid(int srcShape[], int dstShape[]) {
+  public PolarCoordinatesRegrid(int srcShape[], int dstShape[]) {
     si = new FaceInfo(srcShape);
     di = new FaceInfo(dstShape);
   }
@@ -201,8 +201,7 @@ public class PolarCoordinateRegrid {
     int sP = 0;
     int dP = 0;
 
-    int bigRes = Math.max(sRes, dRes);
-
+//    int bigRes = Math.max(sRes, dRes);
 //    int sRef[] = new int[bigRes * 2];
 //    int dRef[] = new int[bigRes * 2];
 //    int smallBorder[] = new int[bigRes * 2];
