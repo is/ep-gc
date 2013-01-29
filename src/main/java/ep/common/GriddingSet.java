@@ -15,7 +15,7 @@ import ucar.nc2.NetcdfFileWriter;
 import ucar.nc2.Variable;
 
 public class GriddingSet {
-  public static final String CONTACT = "qzhang@tsinghua.edu.cn";
+  public static final String CONTACT = "qiangzhang@tsinghua.edu.cn";
   public static final String CONVENTIONS = "CF-1.0";
 
   String path;
