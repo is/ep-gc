@@ -70,6 +70,21 @@ public class Gridding {
   }
 
 
+  public void floatScale(Gridding g) {
+    if (g.getSize() != getSize()) {
+      throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
+    }
+
+    long size = getSize();
+    float[] faciend = (float[])getSurface().getStorage();
+    float[] factor = (float[])g.getSurface().getStorage();
+
+    for (int i = 0; i < size; ++i) {
+      faciend[i] *= factor[i];
+    }
+  }
+
+
   public void floatPlus(Gridding g) {
     if (g.getSize() != getSize()) {
       throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
