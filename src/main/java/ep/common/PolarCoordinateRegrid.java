@@ -30,11 +30,58 @@ public class PolarCoordinateRegrid {
 
 
   FaceInfo si, di;
+  CellSplitReference latCSR, lonCSR;
+
+  double latLimitPointTable[];
+  double lonLimitPointTable[];
 
 
   public PolarCoordinateRegrid(int srcShape[], int dstShape[]) {
     si = new FaceInfo(srcShape);
     di = new FaceInfo(dstShape);
+
+    latCSR = buildCellSplitReference(si.latRes, di.latRes);
+    lonCSR = buildCellSplitReference(si.lonRes, di.lonRes);
+
+    buildLimitPointTable();
+  }
+
+
+  protected void buildLimitPointTable() {
+    latLimitPointTable = new double[si.latRes + di.latRes + 2];
+    lonLimitPointTable = new double[si.lonRes + di.lonRes + 2];
+
+    double base;
+    double diff;
+
+    base = - Math.PI / 2;
+    diff = Math.PI / si.latRes;
+
+    for (int i = 0; i <= si.latRes; ++i) {
+      latLimitPointTable[i] = Math.sin(base);
+      base += diff;
+    }
+
+    base = - Math.PI / 2;
+    diff = Math.PI / di.latRes;
+    for (int i = 0; i <= di.latRes; ++i) {
+      latLimitPointTable[si.latRes + 1 + i] = Math.sin(base);
+      base += diff;
+    }
+
+    base = 0;
+    diff = 2 * Math.PI / si.lonRes;
+    for (int i = 0; i <= si.lonRes; ++i) {
+      lonLimitPointTable[i] = base;
+      base += diff;
+    }
+
+    base = 0;
+    diff = 2 * Math.PI / di.lonRes;
+    for (int i = 0; i <= di.lonRes; ++i) {
+      lonLimitPointTable[si.lonRes + 1 + i] = base;
+      base += diff;
+    }
   }
 
   public static CellSplitReference buildCellSplitReference(int sRes, int dRes) {
