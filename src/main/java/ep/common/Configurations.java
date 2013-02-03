@@ -22,7 +22,7 @@ public class Configurations {
       fis.close();
     }
 
-    if (json == null)
+    if (null == json)
       return null;
 
     return load(json);
