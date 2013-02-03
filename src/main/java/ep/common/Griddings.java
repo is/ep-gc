@@ -2,13 +2,21 @@ package ep.common;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;
 
 public class Griddings {
+  Map<String, PolarCoordinatesRegrid> regrids;
 
+  protected Griddings() {
+    regrids = new HashMap<String, PolarCoordinatesRegrid>();
+  }
+
+  public static Griddings griddings = new Griddings();
 
   public static Gridding read(NetcdfFile ncfile, String variable) throws IOException, InvalidRangeException {
     Array array = ncfile.readSection(variable);
@@ -31,6 +39,32 @@ public class Griddings {
   }
 
 
+  public static PolarCoordinatesRegrid getRegrid(int src[], int dst[])
+  {
+    String key = String.format("%d-%d--%d-%d", src[0], src[1], dst[0], dst[1]);
+    PolarCoordinatesRegrid grid = null;
+    synchronized (griddings) {
+      grid = griddings.regrids.get(key);
+      if (null != grid)
+        return grid;
+
+
+      grid = new PolarCoordinatesRegrid(src, dst);
+      grid.setup();
+      griddings.regrids.put(key, grid);
+      return grid;
+    }
+  }
+
+
+  public static void regrid(Gridding source, Gridding dest) {
+    PolarCoordinatesRegrid regrid =
+      getRegrid(source.getShape(), dest.getShape());
+    regrid.extensityRegrid(source, dest);
+  }
+
+
+  @Deprecated
   public static void remap(Gridding source, Gridding dest) {
     // Very simple & ugly remap function.
     // Only work on Globe surface combination
