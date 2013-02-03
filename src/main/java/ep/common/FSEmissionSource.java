@@ -37,6 +37,10 @@ public class FsEmissionSource implements EmissionSource {
   @Override
   public Grid getGridding(ESID esid) throws Exception {
     String arrayPath = randerPath(esid);
-    return Grids.read(arrayPath);
+    Grid g = Grids.read(arrayPath);
+    if (factoryArray != null) {
+      g.floatScale(factoryArray);
+    }
+    return g;
   }
 }
