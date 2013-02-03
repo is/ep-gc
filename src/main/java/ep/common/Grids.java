@@ -12,17 +12,17 @@ import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;
 
-public class Griddings {
+public class Grids {
   Map<String, PolarCoordinatesRegrid> regrids;
 
-  protected Griddings() {
+  protected Grids() {
     regrids = new HashMap<String, PolarCoordinatesRegrid>();
   }
 
-  public static Griddings griddings = new Griddings();
+  public static Grids grids = new Grids();
 
 
-  public static Gridding read(String esPath) throws IOException, InvalidRangeException {
+  public static Grid read(String esPath) throws IOException, InvalidRangeException {
     List<String> tokens = Lists.newArrayList(Splitter.on("|||").split(esPath));
 
     // TODO add error handle for missing tokens
@@ -30,31 +30,31 @@ public class Griddings {
     String varName = tokens.get(1);
 
     NetcdfFile ncFile = NetcdfFile.open(ncPath);
-    Gridding g = Griddings.read(ncFile, varName);
+    Grid g = Grids.read(ncFile, varName);
     ncFile.close();
     return g;
   }
 
 
-  public static Gridding read(NetcdfFile ncfile, String variable) throws IOException, InvalidRangeException {
+  public static Grid read(NetcdfFile ncfile, String variable) throws IOException, InvalidRangeException {
     Array array = ncfile.readSection(variable);
 
-    Gridding g = new Gridding();
+    Grid g = new Grid();
     g.setSurface(array);
     g.globalize();
     return g;
   }
 
 
-  public static Gridding empty(int shape[]) {
+  public static Grid empty(int shape[]) {
     return empty(float.class, shape[0], shape[1]);
   }
 
 
-  public static Gridding empty(Class typeClass, int lat, int lon) {
+  public static Grid empty(Class typeClass, int lat, int lon) {
     int shape[] = new int[] {lat, lon};
     Array surface = Array.factory(typeClass, shape);
-    Gridding g = new Gridding();
+    Grid g = new Grid();
 
     g.setSurface(surface);
     g.globalize();
@@ -66,33 +66,33 @@ public class Griddings {
   {
     String key = String.format("%d-%d--%d-%d", src[0], src[1], dst[0], dst[1]);
     PolarCoordinatesRegrid grid = null;
-    synchronized (griddings) {
-      grid = griddings.regrids.get(key);
+    synchronized (grids) {
+      grid = grids.regrids.get(key);
       if (null != grid)
         return grid;
 
 
       grid = new PolarCoordinatesRegrid(src, dst);
       grid.setup();
-      griddings.regrids.put(key, grid);
+      grids.regrids.put(key, grid);
       return grid;
     }
   }
 
 
-  public static void regrid(Gridding source, Gridding dest) {
+  public static void regrid(Grid source, Grid dest) {
     PolarCoordinatesRegrid regrid =
       getRegrid(source.getShape(), dest.getShape());
     regrid.extensityRegrid(source, dest);
   }
 
 
-  public static Gridding getCombinedGridding(
+  public static Grid getCombinedGridding(
     int outShape[],
     EmissionSource es, String name, String date,
     String species, String sectors[]) throws Exception {
 
-    Gridding res = empty(outShape);
+    Grid res = empty(outShape);
 
     if (sectors == null || sectors.length == 0)
       return res;
@@ -107,7 +107,7 @@ public class Griddings {
 
 
   @Deprecated
-  public static void remap(Gridding source, Gridding dest) {
+  public static void remap(Grid source, Grid dest) {
     // Very simple & ugly remap function.
     // Only work on Globe surface combination
     Array srcSur = source.getSurface();

@@ -14,7 +14,7 @@ import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFileWriter;
 import ucar.nc2.Variable;
 
-public class GriddingSet {
+public class GridSet {
   public static final String CONTACT = "qiangzhang@tsinghua.edu.cn";
   public static final String CONVENTIONS = "CF-1.0";
 
@@ -29,7 +29,7 @@ public class GriddingSet {
   List<String> variableNames;
 
 
-  public GriddingSet(String path, int shape[]) {
+  public GridSet(String path, int shape[]) {
     this.path = path;
     this.shape = shape;
 
@@ -51,7 +51,7 @@ public class GriddingSet {
   }
 
 
-  public void addGridding(String name, Map<String, String> attr, Gridding g) {
+  public void addGridding(String name, Map<String, String> attr, Grid g) {
     Variable var = writer.addVariable(null, name, DataType.FLOAT, "lat lon");
     if (attr != null) {
       for (Map.Entry e: attr.entrySet()) {

@@ -1,21 +1,20 @@
 package ep.common;
 
 
-import java.util.List;
+import java.io.IOException;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import org.stringtemplate.v4.ST;
-import ucar.nc2.NetcdfFile;
+import ucar.ma2.InvalidRangeException;
 
 public class FsEmissionSource implements EmissionSource {
   FsEmissionSourceConfig conf;
   ST pathSTTemplate;
   Splitter pathSplitter;
-  Gridding factoryArray;
+  Grid factoryArray;
 
 
-  public FsEmissionSource(FsEmissionSourceConfig conf) {
+  public FsEmissionSource(FsEmissionSourceConfig conf) throws IOException, InvalidRangeException {
     this.conf = conf;
     this.pathSplitter = Splitter.on("|||");
 
@@ -23,7 +22,9 @@ public class FsEmissionSource implements EmissionSource {
     this.pathSTTemplate.add("cf", conf);
     this.pathSTTemplate.add("es", ST.EMPTY_ATTR);
 
-
+    if (this.conf.factorArray != null) {
+      factoryArray = Grids.read(this.conf.factorArray);
+    }
   }
 
   public String randerPath(ESID esid) {
@@ -34,8 +35,8 @@ public class FsEmissionSource implements EmissionSource {
 
 
   @Override
-  public Gridding getGridding(ESID esid) throws Exception {
+  public Grid getGridding(ESID esid) throws Exception {
     String arrayPath = randerPath(esid);
-    return Griddings.read(arrayPath);
+    return Grids.read(arrayPath);
   }
 }

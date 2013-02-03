@@ -1,18 +1,17 @@
 package ep.geoschem.demo;
 
-import ep.common.Gridding;
-import ep.common.GriddingSet;
-import ep.common.Griddings;
+import ep.common.Grid;
+import ep.common.GridSet;
+import ep.common.Grids;
 import ep.common.PolarCoordinatesRegrid;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
 import ucar.nc2.NetcdfFile;
-import ucar.nc2.NetcdfFileWriter;
 
 public class ReadGridding0 {
   public static void main(String args[]) throws Exception {
     NetcdfFile ncf = NetcdfFile.open("data/edgar/PM10/v42_PM10_2008_IPCC_1B2a_c_1A1b_c.0.1x0.1.nc");
-    Gridding g = Griddings.read(ncf, "emi_pm10");
+    Grid g = Grids.read(ncf, "emi_pm10");
     ncf.close();
 
     Array arr = g.getSurface();
@@ -36,15 +35,15 @@ public class ReadGridding0 {
     g.globalize();
     System.out.println(g.resLat);
 
-    Gridding ng;
-    ng = Griddings.empty(float.class, 360, 540);
-    // Griddings.remap(g, ng);
+    Grid ng;
+    ng = Grids.empty(float.class, 360, 540);
+    // Grids.remap(g, ng);
 
     PolarCoordinatesRegrid regrid = new PolarCoordinatesRegrid(g.getShape(), ng.getShape());
     regrid.setup();
     regrid.extensityRegrid(g, ng);
 
-    GriddingSet gs = new GriddingSet("test2.nc", ng.getShape());
+    GridSet gs = new GridSet("test2.nc", ng.getShape());
     gs.open();
     gs.addGridding("s0", null, ng);
     gs.flushAndClose();

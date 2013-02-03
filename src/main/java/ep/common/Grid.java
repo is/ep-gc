@@ -3,7 +3,7 @@ package ep.common;
 import ucar.ma2.Array;
 import ucar.ma2.Index;
 
-public class Gridding {
+public class Grid {
   public Array surface;
 
   public float baseLon;
@@ -44,8 +44,8 @@ public class Gridding {
   }
 
 
-  private Gridding cloneWithProperties() {
-    Gridding ng = new Gridding();
+  private Grid cloneWithProperties() {
+    Grid ng = new Grid();
 
     ng.baseLat = baseLat;
     ng.baseLon = baseLon;
@@ -57,20 +57,20 @@ public class Gridding {
   }
 
 
-  public Gridding empty() {
-    Gridding ng = cloneWithProperties();
+  public Grid empty() {
+    Grid ng = cloneWithProperties();
     ng.surface = Array.factory(surface.getElementType(), surface.getShape());
     return ng;
   }
 
-  public Gridding copy() {
-    Gridding ng = cloneWithProperties();
+  public Grid copy() {
+    Grid ng = cloneWithProperties();
     ng.surface = surface.copy();
     return ng;
   }
 
 
-  public void floatScale(Gridding g) {
+  public void floatScale(Grid g) {
     if (g.getSize() != getSize()) {
       throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
     }
@@ -85,7 +85,7 @@ public class Gridding {
   }
 
 
-  public void floatPlus(Gridding g) {
+  public void floatPlus(Grid g) {
     if (g.getSize() != getSize()) {
       throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
     }
@@ -102,9 +102,9 @@ public class Gridding {
 
 
   @Deprecated
-  public Gridding remap(int lat, int lon) {
-    Gridding g = Griddings.empty(float.class, lat, lon);
-    Griddings.remap(g, this);
+  public Grid remap(int lat, int lon) {
+    Grid g = Grids.empty(float.class, lat, lon);
+    Grids.remap(g, this);
     return g;
   }
 }

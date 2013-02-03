@@ -50,7 +50,7 @@ public class PolarCoordinatesRegrid {
   }
 
 
-  public void intensityRegrid(Gridding source, Gridding dest) {
+  public void intensityRegrid(Grid source, Grid dest) {
     float[] sArr = (float[])source.getSurface().getStorage();
     float[] dArr = (float[])dest.getSurface().getStorage();
 
@@ -81,7 +81,7 @@ public class PolarCoordinatesRegrid {
     }
   }
 
-  public void extensityRegrid(Gridding source, Gridding dest) {
+  public void extensityRegrid(Grid source, Grid dest) {
     float[] sArr = (float[])source.getSurface().getStorage();
     float[] dArr = (float[])dest.getSurface().getStorage();
 
