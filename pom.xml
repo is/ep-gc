@@ -21,6 +21,12 @@
       <version>4.0.2</version>
     </dependency>
 
+    <!-- guava -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>13.0.1</version>
+    </dependency>
 
     <!-- jackson -->
     <dependency>
