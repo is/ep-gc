@@ -4,7 +4,7 @@ package ep.geoschem.demo;
 import ep.common.ESID;
 import org.stringtemplate.v4.ST;
 
-public class STSample {
+public class StringTemplateSample {
   public static void main(String args[]) {
     ST st0 = new ST("Hello, <name>");
     st0.add("name", "World");
