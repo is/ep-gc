@@ -1,6 +1,5 @@
 package ep.common;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,9 +28,10 @@ public class Configurations {
     return load(json);
   }
 
+
   public static Configuration load(String json) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
-    Configuration cf = (Configuration)mapper.readValue(json, Configuration.class);
+    Configuration cf = mapper.readValue(json, Configuration.class);
     return cf;
   }
 }
