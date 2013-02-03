@@ -1,6 +1,6 @@
 package ep.common;
 
 public class FsEmissionSourceConfig {
-  String basePath;
-  String pathTemplate;
+  public String basePath;
+  public String pathTemplate;
 }
