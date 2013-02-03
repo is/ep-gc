@@ -10,19 +10,25 @@ import ucar.nc2.NetcdfFile;
 
 public class FsEmissionSource implements EmissionSource {
   FsEmissionSourceConfig conf;
-  ST pathSTFactory;
+  ST pathSTTemplate;
   Splitter pathSplitter;
+  Gridding factoryArray;
+
 
   public FsEmissionSource(FsEmissionSourceConfig conf) {
     this.conf = conf;
-    this.pathSTFactory = new ST(conf.pathTemplate);
     this.pathSplitter = Splitter.on("|||");
+
+    this.pathSTTemplate = new ST(conf.pathTemplate);
+    this.pathSTTemplate.add("cf", conf);
+    this.pathSTTemplate.add("es", ST.EMPTY_ATTR);
+
+
   }
 
   public String randerPath(ESID esid) {
-    ST pathST = new ST(pathSTFactory);
+    ST pathST = new ST(pathSTTemplate);
     pathST.add("es", esid);
-    pathST.add("cf", conf);
     return pathST.render();
   }
 
@@ -30,15 +36,6 @@ public class FsEmissionSource implements EmissionSource {
   @Override
   public Gridding getGridding(ESID esid) throws Exception {
     String arrayPath = randerPath(esid);
-    List<String> tokens = Lists.newArrayList(pathSplitter.split(arrayPath));
-
-    // TODO add error handle for missing tokens
-    String ncPath = tokens.get(0);
-    String varName = tokens.get(1);
-
-    NetcdfFile ncFile = NetcdfFile.open(ncPath);
-    Gridding g = Griddings.read(ncFile, varName);
-    ncFile.close();
-    return g;
+    return Griddings.read(arrayPath);
   }
 }

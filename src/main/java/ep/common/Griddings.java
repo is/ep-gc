@@ -3,8 +3,11 @@ package ep.common;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NetcdfFile;
@@ -17,6 +20,21 @@ public class Griddings {
   }
 
   public static Griddings griddings = new Griddings();
+
+
+  public static Gridding read(String esPath) throws IOException, InvalidRangeException {
+    List<String> tokens = Lists.newArrayList(Splitter.on("|||").split(esPath));
+
+    // TODO add error handle for missing tokens
+    String ncPath = tokens.get(0);
+    String varName = tokens.get(1);
+
+    NetcdfFile ncFile = NetcdfFile.open(ncPath);
+    Gridding g = Griddings.read(ncFile, varName);
+    ncFile.close();
+    return g;
+  }
+
 
   public static Gridding read(NetcdfFile ncfile, String variable) throws IOException, InvalidRangeException {
     Array array = ncfile.readSection(variable);
