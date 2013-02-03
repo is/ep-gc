@@ -28,6 +28,11 @@ public class Griddings {
   }
 
 
+  public static Gridding empty(int shape[]) {
+    return empty(float.class, shape[0], shape[1]);
+  }
+
+
   public static Gridding empty(Class typeClass, int lat, int lon) {
     int shape[] = new int[] {lat, lon};
     Array surface = Array.factory(typeClass, shape);
@@ -61,6 +66,25 @@ public class Griddings {
     PolarCoordinatesRegrid regrid =
       getRegrid(source.getShape(), dest.getShape());
     regrid.extensityRegrid(source, dest);
+  }
+
+
+  public static Gridding getCombinedGridding(
+    int outShape[],
+    EmissionSource es, String name, String date,
+    String species, String sectors[]) throws Exception {
+
+    Gridding res = empty(outShape);
+
+    if (sectors == null || sectors.length == 0)
+      return res;
+
+    ESID esid = new ESID(name, date, species, null);
+    for (String sector: sectors) {
+      esid.sector = sector;
+      regrid(es.getGridding(esid), res);
+    }
+    return res;
   }
 
 
