@@ -19,4 +19,9 @@ public class ESID {
   public String getSpeciesLower() {
     return this.species.toLowerCase();
   }
+
+  @SuppressWarnings("unused")
+  public String getSectorLower() {
+    return this.sector.toLowerCase();
+  }
 }
