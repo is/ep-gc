@@ -8,6 +8,14 @@ public class ESID {
 
   public ESID() {}
 
+  public ESID(ESID e) {
+    name = e.name;
+    date = e.date;
+    species = e.species;
+    sector = e.sector;
+  }
+
+
   public ESID(String name, String date, String species, String sector) {
     this.name = name;
     this.date = date;

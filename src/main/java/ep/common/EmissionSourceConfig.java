@@ -1,5 +1,7 @@
 package ep.common;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -18,4 +20,6 @@ public class EmissionSourceConfig {
   public String name;
   public String dateStep;
   public String factorArray;
+
+  public Map<String, String> speciesAliases;
 }
