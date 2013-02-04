@@ -1,5 +1,6 @@
 package ep.geoschem.demo;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +11,7 @@ import ep.common.EmissionSourceConfig;
 import ep.common.FsEmissionSourceConfig;
 
 public class ConfigJacksonSerializer {
-  public static void main(String args[]) throws JsonProcessingException {
+  public static void main(String args[]) throws IOException {
     Configuration cf = new Configuration();
 
     cf.root = "data";
@@ -33,6 +34,10 @@ public class ConfigJacksonSerializer {
     ObjectMapper om = new ObjectMapper();
     om.configure(SerializationFeature.INDENT_OUTPUT, true);
 
-    System.out.println(om.writeValueAsString(cf));
+    String cfStr = om.writeValueAsString(cf);
+    System.out.println(cfStr);
+    Configuration c2 = om.readValue(cfStr,Configuration.class);
+
+    System.out.println(c2.emissionConfig.get("EDGAR").name);
   }
 }
