@@ -1,9 +1,11 @@
-package ep.common;
+package ep.geoschem;
 
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import ep.common.EmissionSource;
+import ep.common.EmissionSourceConfig;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -1,4 +1,4 @@
-package ep.common;
+package ep.geoschem;
 
 import java.io.File;
 import java.io.FileInputStream;

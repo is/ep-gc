@@ -3,10 +3,9 @@ package ep.geoschem.demo;
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ep.common.Configuration;
+import ep.geoschem.Configuration;
 import ep.common.EmissionSourceConfig;
 import ep.common.FsEmissionSourceConfig;
 

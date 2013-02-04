@@ -4,9 +4,6 @@ package ep.geoschem;
 import java.io.File;
 import java.io.IOException;
 
-import ep.common.Configuration;
-import ep.common.Configurations;
-
 public class Main {
   public static void main(String argv[]) throws IOException {
     Configuration cf = Configurations.load(new File("cfg.js"));
