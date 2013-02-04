@@ -10,7 +10,7 @@ import ep.common.EmissionSourceConfig;
 import ep.common.FsEmissionSourceConfig;
 import ucar.ma2.InvalidRangeException;
 
-public class ConfigJacksonSerializer {
+public class ConfigSample {
   public static void main(String args[]) throws IOException, InvalidRangeException {
     Configuration cf = new Configuration();
 
@@ -20,14 +20,16 @@ public class ConfigJacksonSerializer {
     cf.emissions = new String[] {"EDGAR", "EMEP", "MEIC"};
     cf.sectors = new String[] {"power", "industry", "residential", "transporation", "agriculture"};
 
-    EmissionSourceConfig esc0 = new EmissionSourceConfig();
-    esc0.name = "MEIC";
-    esc0.dateStep = "monthly";
+    FsEmissionSourceConfig esc0 = new FsEmissionSourceConfig();
+    esc0.name = "EMEP";
+    esc0.dateStep = "yearly";
+    esc0.basePath = "data/in";
+    esc0.pathTemplate = "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
 
     FsEmissionSourceConfig esc1 = new FsEmissionSourceConfig();
     esc1.name = "EDGAR";
     esc1.dateStep = "yearly";
-    esc1.basePath = "data/in/edgar";
+    esc1.basePath = "data/in";
     esc1.pathTemplate = "<cf.basePath>/<es.name>/<es.species>/" +
       "v42_<es.species>_<es.date>_IPCC_<es.sector>.0.1x0.1.nc|||" +
       "emi_<es.speciesLower>";
