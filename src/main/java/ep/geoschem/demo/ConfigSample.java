@@ -25,6 +25,8 @@ public class ConfigSample {
     esc0.dateStep = "yearly";
     esc0.basePath = "data/in";
     esc0.pathTemplate = "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
+    esc0.speciesAliases = new HashMap<String, String>();
+    esc0.speciesAliases.put("SO2", "SOx");
 
     FsEmissionSourceConfig esc1 = new FsEmissionSourceConfig();
     esc1.name = "EDGAR";

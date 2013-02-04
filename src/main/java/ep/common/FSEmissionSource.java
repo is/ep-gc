@@ -36,6 +36,11 @@ public class FsEmissionSource implements EmissionSource {
 
   @Override
   public Grid getGridding(ESID esid) throws Exception {
+    if (null != conf.speciesAliases && conf.speciesAliases.get(esid.species) != null) {
+      esid = new ESID(esid);
+      esid.species = conf.speciesAliases.get(esid.species);
+    }
+
     String arrayPath = randerPath(esid);
     Grid g = Grids.read(arrayPath);
     if (factoryArray != null) {
