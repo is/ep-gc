@@ -48,8 +48,12 @@ public class ConfigSample {
     Configuration c2 = om.readValue(cfStr,Configuration.class);
 
     System.out.println(c2.emissionConfigs.get("EDGAR").name);
-    c2.setup();
+    c2.init();
 
     System.out.println(c2);
+    String ss[] = c2.getSourceSectors("NH3", "Power", "EDGAR");
+    System.out.println(c2.getSourceSectors("NH3", "Power", "EDGAR"));
+    System.out.println(c2.getYearIndex("EMEP", "1974"));
+    System.out.println(c2.getYearIndex("EMEP", "2008"));
   }
 }
