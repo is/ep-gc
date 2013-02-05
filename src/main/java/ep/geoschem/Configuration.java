@@ -78,10 +78,10 @@ public class Configuration {
 
     while (it.hasNext()) {
       Map<String, String> row = (Map<String, String>) it.next();
-      String sp = (String) row.get("SPECIES");
-      String es = (String) row.get("SOURCE");
-      String st = (String) row.get("SECTOR");
-      String ss = (String) row.get("SOURCESECTORS");
+      String sp = row.get("SPECIES");
+      String es = row.get("SOURCE");
+      String st = row.get("SECTOR");
+      String ss = row.get("SOURCESECTORS");
 
       if (Strings.isNullOrEmpty(sp))
         continue;
