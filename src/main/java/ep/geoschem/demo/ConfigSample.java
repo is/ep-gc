@@ -2,6 +2,7 @@ package ep.geoschem.demo;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import ep.common.FileSystemEmissionSourceConfig;
 import ep.geoschem.Configuration;
 import ep.common.EmissionSourceConfig;
+import ep.geoschem.Target;
 import ucar.ma2.InvalidRangeException;
 
 public class ConfigSample {
@@ -41,6 +43,20 @@ public class ConfigSample {
     cf.emissionConfigs.put(esc0.name, esc0);
     cf.emissionConfigs.put(esc1.name, esc1);
 
+    Target target = new Target();
+    target.name = "middle";
+    target.beginDate = "200301";
+    target.endDate = "200412";
+    target.base = "data/o0";
+    target.dateStep = "monthly";
+    target.shape = new int[] {900, 1800};
+    target.enabled = new String[] {"EDGAR"};
+    target.pathTemplate = "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
+    target.init();
+
+    cf.targets = new LinkedList<Target>();
+    cf.targets.add(target);
+
     ObjectMapper om = new ObjectMapper();
     om.configure(SerializationFeature.INDENT_OUTPUT, true);
     om.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
@@ -59,6 +75,7 @@ public class ConfigSample {
     System.out.println(c2.getYearIndex("EMEP", "1974"));
     System.out.println(c2.getYearIndex("EMEP", "2008"));
 
+    c2.loadTargetConfig();
     System.out.println(om.writeValueAsString(c2));
   }
 }
