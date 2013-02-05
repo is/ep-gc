@@ -214,6 +214,11 @@ public class Configuration {
     initYearIndex();
   }
 
+  public EmissionSource getEmissionSource(String emission) {
+    return emissionSources.get(emission);
+  }
+
+
   public String getYearIndex(String emission, String year) {
     return yearIndex.get(emission + "," + year);
   }
