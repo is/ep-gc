@@ -35,6 +35,9 @@ public class Configuration {
   @JsonIgnore public String emissions[];
   @JsonIgnore public Map<String, EmissionSource> emissionSources;
   @JsonIgnore public Map<String, SectorTable> sectorMapper;
+  @JsonIgnore public Map<String, String> yearIndex;
+  @JsonIgnore int beginYear;
+  @JsonIgnore int endYear;
 
   @JsonProperty("esconf")
   public Map<String, EmissionSourceConfig> emissionConfigs;
@@ -44,7 +47,11 @@ public class Configuration {
   }
 
 
-  public void setup() throws IOException, InvalidRangeException {
+  void initEmissionSources() throws IOException, InvalidRangeException {
+    emissionSources = new HashMap<String, EmissionSource>();
+    emissions = Iterables.toArray(emissionConfigs.keySet(), String.class);
+
+    Arrays.sort(emissions);
     emissionSources = new HashMap<String, EmissionSource>();
     emissions = Iterables.toArray(emissionConfigs.keySet(), String.class);
 
@@ -62,8 +69,10 @@ public class Configuration {
         emissionSources.put(e.getKey(), es);
       }
     }
+  }
 
 
+  void initSectorMapper() throws IOException {
     HashSet species = new HashSet();
     HashSet sectors = new HashSet();
 
@@ -105,5 +114,99 @@ public class Configuration {
 
     this.sectors = Iterables.toArray(sectors, String.class);
     this.species = Iterables.toArray(species, String.class);
+  }
+
+
+  void initYearIndex() throws IOException {
+    yearIndex = new HashMap<String,String>();
+
+    CsvSchema schema = CsvSchema.emptySchema().withHeader();
+    ObjectMapper mapper = new CsvMapper();
+
+    MappingIterator<Map> it = mapper.reader(Map.class).
+      with(schema).readValues(new File(conf, "year_source.csv"));
+
+    beginYear = 99999;
+    endYear = 1;
+
+    while(it.hasNext()) {
+
+      Map<String, String> row = (Map<String, String>)it.next();
+      String year = row.get("YEAR");
+      int nYear = Integer.parseInt(year);
+      if (nYear > endYear) {
+        endYear = nYear;
+      }
+
+      if (nYear < beginYear) {
+        beginYear = nYear;
+      }
+
+      for (String es: emissions) {
+        String k = row.get(es);
+        if (k == null || k.equals("0"))
+          continue;
+
+        String key = es + "," + year;
+        yearIndex.put(key, year);
+      }
+    }
+
+    for (String es: emissions) {
+      for (int y = beginYear; y <= endYear; ++y) {
+        String year = Integer.toString(y);
+        String key = es + "," + year;
+
+
+        if (yearIndex.get(key) == null) {
+          String tYear = null;
+          String iYear = null;
+          String sKey = null;
+          String sYear = null;
+
+          // scan forward
+          for (int sy = y + 1; sy <= endYear; ++sy) {
+            sYear = Integer.toString(sy);
+            sKey = es + "," + sYear;
+            iYear = yearIndex.get(sKey);
+            if (iYear != null) {
+              tYear = iYear;
+              break;
+            }
+          }
+
+          if (tYear != null) {
+            yearIndex.put(key, tYear);
+            continue;
+          }
+
+          for (int sy = y - 1; sy >= beginYear; --sy) {
+            sYear = Integer.toString(sy);
+            sKey = es + "," + sYear;
+            iYear = yearIndex.get(sKey);
+            if (iYear != null) {
+              tYear = iYear;
+              break;
+            }
+          }
+
+          yearIndex.put(key, tYear);
+        }
+      }
+    }
+  }
+
+  public void init() throws IOException, InvalidRangeException {
+    initEmissionSources();
+    initSectorMapper();
+    initYearIndex();
+  }
+
+  public String getYearIndex(String emission, String year) {
+    return yearIndex.get(emission + "," + year);
+  }
+
+  public String[] getSourceSectors(String species, String sector, String emissionSource) {
+    return sectorMapper.get(species + "," + sector).sectors.get(emissionSource);
   }
 }
