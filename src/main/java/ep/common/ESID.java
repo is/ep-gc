@@ -47,6 +47,6 @@ public class ESID {
   public String getMonth() {
     if (date.length() == 4)
       return null;
-    return date.substring(4, 2);
+    return date.substring(4, 6);
   }
 }

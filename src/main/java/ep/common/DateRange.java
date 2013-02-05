@@ -60,7 +60,7 @@ public class DateRange implements Iterable<String> {
     }
 
     int year = Integer.parseInt(date.substring(0, 4));
-    int month = Integer.parseInt(date.substring(4, 2));
+    int month = Integer.parseInt(date.substring(4, 6));
 
     month += 1;
     if (month == 13) {
