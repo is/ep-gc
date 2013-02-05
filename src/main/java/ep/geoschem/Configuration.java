@@ -2,10 +2,7 @@ package ep.geoschem;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,14 +27,23 @@ public class Configuration {
   public String conf;
   public String defaultEmission;
 
-  @JsonIgnore public String species[];
-  @JsonIgnore public String sectors[];
-  @JsonIgnore public String emissions[];
+  // @JsonIgnore
+  public String species[];
+  // @JsonIgnore
+  public String sectors[];
+  // @JsonIgnore
+  public String emissions[];
   @JsonIgnore public Map<String, EmissionSource> emissionSources;
-  @JsonIgnore public Map<String, SectorTable> sectorMapper;
-  @JsonIgnore public Map<String, String> yearIndex;
-  @JsonIgnore int beginYear;
-  @JsonIgnore int endYear;
+  //@JsonIgnore
+  public Map<String, SectorTable> sectorMapper;
+  //@JsonIgnore
+  @JsonProperty("yearmap")
+  public Map<String, String> yearIndex;
+  //@JsonIgnore
+  public int beginYear;
+  //@JsonIgnore
+  public int endYear;
+  @JsonIgnore public List<Result> results;
 
   @JsonProperty("esconf")
   public Map<String, EmissionSourceConfig> emissionConfigs;
@@ -45,6 +51,15 @@ public class Configuration {
   public static class SectorTable {
     public Map<String, String[]> sectors;
   }
+
+  public static class Result {
+    public String base;
+    String emissions[];
+    int[] shape;
+    String pathTemplate;
+    int beginYear, endYear;
+  };
+
 
 
   void initEmissionSources() throws IOException, InvalidRangeException {
