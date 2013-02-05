@@ -24,11 +24,16 @@ public class GridBuilder {
   }
 
   public void build(GridSet gs, String varName, ESID esid) throws Exception {
+
     Grid resG = Grids.empty(target.shape);
     for (String es: conf.emissions) {
       if (target.enabledSet != null && !target.enabledSet.contains(es)) {
         continue;
       }
+
+      System.out.format("build %s: %s,%s,%s - %s\n", varName,
+        esid.date, esid.species, esid.sector, es);
+
 
       String[] ss = conf.getSourceSectors(esid.species, esid.sector, es);
       if (ss == null)

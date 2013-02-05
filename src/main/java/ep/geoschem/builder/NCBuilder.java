@@ -34,7 +34,7 @@ public class NCBuilder {
 
 
   public DataSetBuilder getParent() {
-    return getParent();
+    return parent;
   }
 
 
