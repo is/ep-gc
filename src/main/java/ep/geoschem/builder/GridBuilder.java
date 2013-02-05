@@ -1,6 +1,7 @@
 package ep.geoschem.builder;
 
 import ep.common.ESID;
+import ep.common.EmissionSource;
 import ep.common.Grid;
 import ep.common.GridSet;
 import ep.common.Grids;
@@ -22,14 +23,41 @@ public class GridBuilder {
     this.target = root.getTarget();
   }
 
-  public void build(GridSet gs, String varName, ESID esid) {
+  public void build(GridSet gs, String varName, ESID esid) throws Exception {
     Grid resG = Grids.empty(target.shape);
     for (String es: conf.emissions) {
       if (target.enabledSet != null && !target.enabledSet.contains(es)) {
         continue;
       }
 
+      String[] ss = conf.getSourceSectors(esid.species, esid.sector, es);
+      if (ss == null)
+        continue;
 
+      String year = esid.getYear();
+
+      if (conf.getYearIndex(es, year).equals(year)) {
+        Grid eg = Grids.getCombinedGridding(target.shape,
+          conf.getEmissionSource(es), es, esid.date, esid.species, ss);
+        resG.floatPlus(eg);
+        continue;
+      }
+
+      String yearBase = conf.getYearIndex(es, year);
+      String des = conf.defaultEmission;
+      String[] dss = conf.getSourceSectors(esid.species, esid.sector, des);
+
+      Grid baseFactor = Grids.getCombinedGridding(target.shape,
+        conf.getEmissionSource(des), des, yearBase, esid.species, dss);
+      Grid targetFactor = Grids.getCombinedGridding(target.shape,
+        conf.getEmissionSource(des), des, year, esid.species, dss);
+      Grid eg = Grids.getCombinedGridding(target.shape,
+        conf.getEmissionSource(es), es, year, esid.species, ss);
+
+      eg.floatScale2(baseFactor, targetFactor);
+      resG.floatPlus(eg);
     }
+    // TODO more var's attribute.
+    gs.addGridding(varName, null, resG);
   }
 }
