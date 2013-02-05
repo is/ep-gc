@@ -2,12 +2,17 @@ package ep.geoschem;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -48,8 +53,7 @@ public class Configuration {
   //@JsonIgnore
   public int endYear;
 
-  @JsonProperty("target")
-  @JsonIgnore public List<Target> targets;
+  public List<Target> targets;
 
   @JsonProperty("esconf")
   public Map<String, EmissionSourceConfig> emissionConfigs;
@@ -225,5 +229,14 @@ public class Configuration {
 
   public String[] getSourceSectors(String species, String sector, String emissionSource) {
     return sectorMapper.get(species + "," + sector).sectors.get(emissionSource);
+  }
+
+  public void loadTargetConfig() throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, Target.class);
+    targets = mapper.readValue(new File("cfg.target.js"), type);
+    for (Target t: targets) {
+      t.init();
+    }
   }
 }
