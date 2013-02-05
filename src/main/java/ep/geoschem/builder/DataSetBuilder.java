@@ -81,7 +81,7 @@ public class DataSetBuilder {
   }
 
 
-  public void build() throws IOException, InvalidRangeException {
+  public void build() throws Exception {
     initGridCluster();
     ArrayList<String> ncFiles = new ArrayList(gridClusters.keySet());
 

@@ -38,7 +38,7 @@ public class NCBuilder {
   }
 
 
-  public void build(String ncFilename) throws IOException, InvalidRangeException {
+  public void build(String ncFilename) throws Exception {
     List<ESID> cluster = parent.getGridCluster(ncFilename);
     Splitter splitter = Splitter.on("|||");
 
