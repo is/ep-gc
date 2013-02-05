@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import ep.common.FileSystemEmissionSourceConfig;
 import ep.geoschem.Configuration;
 import ep.common.EmissionSourceConfig;
-import ep.common.FsEmissionSourceConfig;
 import ucar.ma2.InvalidRangeException;
 
 public class ConfigSample {
@@ -20,7 +20,7 @@ public class ConfigSample {
     cf.emissions = new String[] {"EDGAR", "EMEP", "MEIC"};
     cf.sectors = new String[] {"power", "industry", "residential", "transporation", "agriculture"};
 
-    FsEmissionSourceConfig esc0 = new FsEmissionSourceConfig();
+    FileSystemEmissionSourceConfig esc0 = new FileSystemEmissionSourceConfig();
     esc0.name = "EMEP";
     esc0.dateStep = "yearly";
     esc0.basePath = "data/in";
@@ -28,7 +28,7 @@ public class ConfigSample {
     esc0.speciesAliases = new HashMap<String, String>();
     esc0.speciesAliases.put("SO2", "SOx");
 
-    FsEmissionSourceConfig esc1 = new FsEmissionSourceConfig();
+    FileSystemEmissionSourceConfig esc1 = new FileSystemEmissionSourceConfig();
     esc1.name = "EDGAR";
     esc1.dateStep = "yearly";
     esc1.basePath = "data/in";

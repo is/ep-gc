@@ -19,8 +19,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import ep.common.EmissionSource;
 import ep.common.EmissionSourceConfig;
-import ep.common.FsEmissionSource;
-import ep.common.FsEmissionSourceConfig;
+import ep.common.FileSystemEmissionSource;
+import ep.common.FileSystemEmissionSourceConfig;
 import ucar.ma2.InvalidRangeException;
 
 
@@ -54,8 +54,8 @@ public class Configuration {
       EmissionSource es = null;
       EmissionSourceConfig esc = e.getValue();
 
-      if (esc instanceof FsEmissionSourceConfig) {
-        es = new FsEmissionSource((FsEmissionSourceConfig) esc);
+      if (esc instanceof FileSystemEmissionSourceConfig) {
+        es = new FileSystemEmissionSource((FileSystemEmissionSourceConfig) esc);
       }
 
       if (es != null) {

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
   @JsonSubTypes.Type(value = EmissionSourceConfig.class, name = "base"),
-  @JsonSubTypes.Type(value = FsEmissionSourceConfig.class, name = "fs")
+  @JsonSubTypes.Type(value = FileSystemEmissionSourceConfig.class, name = "fs")
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmissionSourceConfig {
