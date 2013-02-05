@@ -35,6 +35,18 @@ public class ESID {
 
 
   @SuppressWarnings("unused")
+  public String getNameLower() {
+    return this.name.toLowerCase();
+  }
+
+
+  @SuppressWarnings("unused")
+  public String getNameUpper() {
+    return this.name.toUpperCase();
+  }
+
+
+  @SuppressWarnings("unused")
   public String getYear() {
     if (date.length() == 4)
       return date;
