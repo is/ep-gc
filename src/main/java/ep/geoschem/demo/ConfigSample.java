@@ -3,6 +3,7 @@ package ep.geoschem.demo;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ep.common.FileSystemEmissionSourceConfig;
@@ -42,6 +43,8 @@ public class ConfigSample {
 
     ObjectMapper om = new ObjectMapper();
     om.configure(SerializationFeature.INDENT_OUTPUT, true);
+    om.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+    om.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
 
     String cfStr = om.writeValueAsString(cf);
     System.out.println(cfStr);
@@ -55,5 +58,7 @@ public class ConfigSample {
     System.out.println(c2.getSourceSectors("NH3", "Power", "EDGAR"));
     System.out.println(c2.getYearIndex("EMEP", "1974"));
     System.out.println(c2.getYearIndex("EMEP", "2008"));
+
+    System.out.println(om.writeValueAsString(c2));
   }
 }
