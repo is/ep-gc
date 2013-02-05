@@ -1,5 +1,12 @@
 package ep.geoschem.builder;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import ep.common.DateRange;
@@ -7,15 +14,26 @@ import ep.common.ESID;
 import ep.geoschem.Configuration;
 import ep.geoschem.Target;
 import org.stringtemplate.v4.ST;
-
-import java.util.*;
+import ucar.ma2.InvalidRangeException;
 
 public class DataSetBuilder {
   Configuration conf;
   Target target;
 
-  Map<String, List<ESID>> gridCluster;
+  Map<String, List<ESID>> gridClusters;
 
+
+  public Configuration getConf() {
+    return conf;
+  }
+
+  public Target getTarget() {
+    return target;
+  }
+
+  public List<ESID> getGridCluster(String fn) {
+    return gridClusters.get(fn);
+  }
 
   public DataSetBuilder(Configuration conf, Target target) {
     this.conf = conf;
@@ -24,7 +42,7 @@ public class DataSetBuilder {
 
 
   public void initGridCluster() {
-    gridCluster = new HashMap<String, List<ESID>>();
+    gridClusters = new HashMap<String, List<ESID>>();
     DateRange range = new DateRange(target.beginDate, target.endDate);
     Splitter splitter = Splitter.on("|||");
 
@@ -44,11 +62,11 @@ public class DataSetBuilder {
             List<String> oPathTokens = Lists.newArrayList(splitter.split(oPath));
             String ncPath = oPathTokens.get(0);
             // String varName = oPathTokens.get(1);
-            List<ESID> cluster = gridCluster.get(ncPath);
+            List<ESID> cluster = gridClusters.get(ncPath);
 
             if (cluster == null) {
               cluster = new LinkedList<ESID>();
-              gridCluster.put(ncPath, cluster);
+              gridClusters.put(ncPath, cluster);
             }
             cluster.add(esid);
           }
@@ -56,9 +74,20 @@ public class DataSetBuilder {
       //}
     }
 
-    System.out.println(gridCluster.size() + " grid sets");
-    for (String s: gridCluster.keySet()) {
-      System.out.println(s);
+//    System.out.println(gridClusters.size() + " grid sets");
+//    for (String s: gridClusters.keySet()) {
+//      System.out.println(s);
+//    }
+  }
+
+
+  public void build() throws IOException, InvalidRangeException {
+    initGridCluster();
+    ArrayList<String> ncFiles = new ArrayList(gridClusters.keySet());
+
+    NCBuilder ncBuilder = new NCBuilder(this);
+    for (String ncFile: ncFiles) {
+      ncBuilder.build(ncFile);
     }
   }
 }
