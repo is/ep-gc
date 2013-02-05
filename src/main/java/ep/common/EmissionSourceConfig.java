@@ -2,7 +2,6 @@ package ep.common;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -14,9 +13,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmissionSourceConfig {
-  @JsonIgnore
-  public boolean enable;
-
   public String name;
   public String dateStep;
   public String factorArray;
