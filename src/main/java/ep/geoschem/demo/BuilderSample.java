@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class BuilderSample {
-  public static void main(String args[]) throws IOException, InvalidRangeException {
+  public static void main(String args[]) throws Exception {
     Configuration cf = new Configuration();
 
     cf.root = "data";
@@ -27,7 +27,7 @@ public class BuilderSample {
     esc0.name = "EMEP";
     esc0.dateStep = "yearly";
     esc0.basePath = "data/in";
-    esc0.pathTemplate = "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
+    esc0.pathTemplate = "<cf.basePath>/<es.nameLower>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
     esc0.speciesAliases = new HashMap<String, String>();
     esc0.speciesAliases.put("SO2", "SOx");
 
@@ -35,7 +35,7 @@ public class BuilderSample {
     esc1.name = "EDGAR";
     esc1.dateStep = "yearly";
     esc1.basePath = "data/in";
-    esc1.pathTemplate = "<cf.basePath>/<es.name>/<es.species>/" +
+    esc1.pathTemplate = "<cf.basePath>/<es.nameLower>/<es.species>/" +
       "v42_<es.species>_<es.date>_IPCC_<es.sector>.0.1x0.1.nc|||" +
       "emi_<es.speciesLower>";
 
@@ -65,16 +65,17 @@ public class BuilderSample {
 
     Target target = new Target();
     target.name = "middle";
-    target.beginDate = "200301";
-    target.endDate = "200412";
+    target.beginDate = "2003";
+    target.endDate = "2004";
     target.base = "data/o0";
     target.dateStep = "monthly";
-    target.shape = new int[] {900, 1800};
-    target.enabled = new String[] {"EDGAR"};
+    target.shape = new int[] {180, 360};
+    target.enabled = new String[] {"EDGAR", "EMEP", };
     target.pathTemplate = "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
     target.init();
 
     DataSetBuilder builder = new DataSetBuilder(c2, target);
     builder.initGridCluster();
+    builder.build();
   }
 }
