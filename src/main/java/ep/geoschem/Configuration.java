@@ -112,6 +112,8 @@ public class Configuration {
         continue;
       if (Strings.isNullOrEmpty(ss))
         continue;
+      if (sp.startsWith("#"))
+        continue;
 
       species.add(sp);
       sectors.add(st);
@@ -228,7 +230,11 @@ public class Configuration {
   }
 
   public String[] getSourceSectors(String species, String sector, String emissionSource) {
-    return sectorMapper.get(species + "," + sector).sectors.get(emissionSource);
+    String key = species + "," + sector;
+    SectorTable st = sectorMapper.get(key);
+    if (st == null)
+      return null;
+    return st.sectors.get(emissionSource);
   }
 
   public void loadTargetConfig() throws IOException {
