@@ -32,4 +32,21 @@ public class ESID {
   public String getSectorLower() {
     return this.sector.toLowerCase();
   }
+
+
+  @SuppressWarnings("unused")
+  public String getYear() {
+    if (date.length() == 4)
+      return date;
+
+    return date.substring(0, 4);
+  }
+
+
+  @SuppressWarnings("unused")
+  public String getMonth() {
+    if (date.length() == 4)
+      return null;
+    return date.substring(4, 2);
+  }
 }
