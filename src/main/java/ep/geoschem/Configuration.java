@@ -43,6 +43,7 @@ public class Configuration {
   public int beginYear;
   //@JsonIgnore
   public int endYear;
+
   @JsonIgnore public List<Result> results;
 
   @JsonProperty("esconf")
@@ -57,7 +58,7 @@ public class Configuration {
     String emissions[];
     int[] shape;
     String pathTemplate;
-    int beginYear, endYear;
+    String beginDate, endDate;
   };
 
 
