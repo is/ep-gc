@@ -101,10 +101,27 @@ public class Grid {
   }
 
 
-  @Deprecated
-  public Grid remap(int lat, int lon) {
-    Grid g = Grids.empty(float.class, lat, lon);
-    Grids.remap(g, this);
-    return g;
+  public void floatScale2(Grid baseFactor, Grid targetFactor) {
+    if (getSize() != baseFactor.getSize())
+      throw new IllegalArgumentException("not equal grid added (base): " + getSize() + " + " + baseFactor.getSize());
+    if (getSize() != targetFactor.getSize())
+      throw new IllegalArgumentException("not equal grid added (target): " + getSize() + " + " + targetFactor.getSize());
+
+    int size = (int)getSize();
+    float[] cur = (float[])getSurface().getStorage();
+    float[] base = (float[])baseFactor.getSurface().getStorage();
+    float[] target = (float[])targetFactor.getSurface().getStorage();
+
+    for (int i = 0; i < size; ++i) {
+      if (base[i] == 0)
+        continue;
+
+      if (target[i] == 0) {
+        cur[i] = 0;
+        continue;
+      }
+
+      cur[i] = cur[i] * target[i] / base[i];
+    }
   }
 }
