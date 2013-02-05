@@ -7,6 +7,7 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -21,6 +22,9 @@ import ep.common.FileSystemEmissionSourceConfig;
 import ucar.ma2.InvalidRangeException;
 
 
+@JsonPropertyOrder({
+  "root", "conf", "emissions", "species", "sectors",
+  "esconf", "beginYear", "endYear", "yearmap"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Configuration {
   public String root;
@@ -44,7 +48,8 @@ public class Configuration {
   //@JsonIgnore
   public int endYear;
 
-  @JsonIgnore public List<Result> results;
+  @JsonProperty("target")
+  @JsonIgnore public List<Target> targets;
 
   @JsonProperty("esconf")
   public Map<String, EmissionSourceConfig> emissionConfigs;
@@ -52,15 +57,6 @@ public class Configuration {
   public static class SectorTable {
     public Map<String, String[]> sectors;
   }
-
-  public static class Result {
-    public String base;
-    String emissions[];
-    int[] shape;
-    String pathTemplate;
-    String beginDate, endDate;
-  };
-
 
 
   void initEmissionSources() throws IOException, InvalidRangeException {
@@ -176,9 +172,9 @@ public class Configuration {
 
         if (yearIndex.get(key) == null) {
           String tYear = null;
-          String iYear = null;
-          String sKey = null;
-          String sYear = null;
+          String iYear;
+          String sKey;
+          String sYear;
 
           // scan forward
           for (int sy = y + 1; sy <= endYear; ++sy) {
