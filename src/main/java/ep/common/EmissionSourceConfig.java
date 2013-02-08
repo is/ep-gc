@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import ep.geoschem.Configuration;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
@@ -23,5 +24,6 @@ public class EmissionSourceConfig {
   public Map<String, String> speciesAliases;
   public String timeFactorType;
 
+  @JsonIgnore public Configuration up;
   @JsonIgnore public GridFactor timeFactor;
 }

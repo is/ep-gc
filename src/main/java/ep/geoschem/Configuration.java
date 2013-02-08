@@ -80,6 +80,8 @@ public class Configuration {
       EmissionSource es = null;
       EmissionSourceConfig esc = e.getValue();
 
+      esc.up = this;
+
       // simple scalar timefactor.
       if (esc.timeFactorType == null)
         esc.timeFactorType = "csv";

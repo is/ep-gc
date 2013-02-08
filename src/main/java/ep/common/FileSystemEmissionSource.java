@@ -46,6 +46,10 @@ public class FileSystemEmissionSource implements EmissionSource {
     if (factoryArray != null) {
       g.floatScale(factoryArray);
     }
+
+    if (esid.date != null && esid.date.length() == 6 && conf.timeFactor != null) {
+      conf.timeFactor.apply(esid, g);
+    }
     return g;
   }
 }
