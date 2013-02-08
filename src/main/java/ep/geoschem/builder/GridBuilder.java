@@ -1,5 +1,6 @@
 package ep.geoschem.builder;
 
+import com.google.common.base.Joiner;
 import ep.common.ESID;
 import ep.common.EmissionSource;
 import ep.common.Grid;
@@ -31,13 +32,12 @@ public class GridBuilder {
         continue;
       }
 
-      System.out.format("build %s: %s,%s,%s - %s\n", varName,
-        esid.date, esid.species, esid.sector, es);
-
-
       String[] ss = conf.getSourceSectors(esid.species, esid.sector, es);
       if (ss == null)
         continue;
+
+      System.out.format("build %s: %s, %s, %s - %s {%s}\n", varName,
+        esid.date, esid.species, esid.sector, es, Joiner.on(", ").join(ss));
 
       String year = esid.getYear();
 
