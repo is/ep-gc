@@ -1,6 +1,5 @@
 package ep.geoschem.builder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,7 +13,6 @@ import ep.common.ESID;
 import ep.geoschem.Configuration;
 import ep.geoschem.Target;
 import org.stringtemplate.v4.ST;
-import ucar.ma2.InvalidRangeException;
 
 public class DataSetBuilder {
   Configuration conf;
@@ -42,7 +40,7 @@ public class DataSetBuilder {
 
 
   public void initGridCluster() {
-    gridClusters = new HashMap<String, List<ESID>>();
+    gridClusters = new HashMap<>();
     DateRange range = new DateRange(target.beginDate, target.endDate);
     Splitter splitter = Splitter.on("|||");
 
@@ -65,7 +63,7 @@ public class DataSetBuilder {
             List<ESID> cluster = gridClusters.get(ncPath);
 
             if (cluster == null) {
-              cluster = new LinkedList<ESID>();
+              cluster = new LinkedList<>();
               gridClusters.put(ncPath, cluster);
             }
             cluster.add(esid);
@@ -83,7 +81,7 @@ public class DataSetBuilder {
 
   public void build() throws Exception {
     initGridCluster();
-    ArrayList<String> ncFiles = new ArrayList(gridClusters.keySet());
+    ArrayList<String> ncFiles = new ArrayList<>(gridClusters.keySet());
 
     NCBuilder ncBuilder = new NCBuilder(this);
     for (String ncFile: ncFiles) {

@@ -1,7 +1,6 @@
 package ep.geoschem.builder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,13 +10,10 @@ import java.util.Map;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import ep.common.ESID;
-import ep.common.Grid;
 import ep.common.GridSet;
 import ep.geoschem.Configuration;
 import ep.geoschem.Target;
-import ep.geoschem.demo.ReadGridding0;
 import org.stringtemplate.v4.ST;
-import ucar.ma2.InvalidRangeException;
 
 public class NCBuilder {
   DataSetBuilder parent;
@@ -48,7 +44,7 @@ public class NCBuilder {
     gs = new GridSet(ncFilename, target.shape);
     gs.open();
 
-    Map<String, ESID> subTasks = new HashMap<String, ESID>();
+    Map<String, ESID> subTasks = new HashMap<>();
     GridBuilder gridBuilder = new GridBuilder(this);
 
     for (ESID esid: cluster) {
@@ -59,12 +55,12 @@ public class NCBuilder {
 
       String fullPath = st.render();
       List<String> tokens = Lists.newArrayList(splitter.split(fullPath));
-      String ncPath = tokens.get(0);
+      // String ncPath = tokens.get(0);
       String varName = tokens.get(1);
       subTasks.put(varName, esid);
     }
 
-    List<String> vars = new ArrayList<String>(subTasks.keySet());
+    List<String> vars = new ArrayList<>(subTasks.keySet());
     Collections.sort(vars);
 
     for (String varName: vars) {

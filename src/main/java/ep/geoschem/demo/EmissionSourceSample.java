@@ -1,8 +1,11 @@
 package ep.geoschem.demo;
 
 
-import ep.common.*;
+import ep.common.ESID;
+import ep.common.FileSystemEmissionSource;
 import ep.common.FileSystemEmissionSourceConfig;
+import ep.common.Grid;
+import ep.common.Grids;
 
 public class EmissionSourceSample {
   public static void main(String args[]) throws Exception {
@@ -14,7 +17,7 @@ public class EmissionSourceSample {
         "emi_<es.speciesLower>";
 
     FileSystemEmissionSource es = new FileSystemEmissionSource(esConf);
-    Grid g = es.getGridding(new ESID("edgar", "2004", "SO2", "7A"));
+    Grid g; //  = es.getGridding(new ESID("edgar", "2004", "SO2", "7A"));
     g = es.getGridding(new ESID("edgar", "2004", "SO2", "7A"));
     System.out.println(g.getShape());
     System.out.println(g.getShape()[0] + ", " + g.getShape()[1]);

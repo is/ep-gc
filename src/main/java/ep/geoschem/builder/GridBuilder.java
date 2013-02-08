@@ -2,7 +2,6 @@ package ep.geoschem.builder;
 
 import com.google.common.base.Joiner;
 import ep.common.ESID;
-import ep.common.EmissionSource;
 import ep.common.Grid;
 import ep.common.GridSet;
 import ep.common.Grids;

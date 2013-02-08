@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,7 +33,7 @@ public class Target {
     }
 
     if (enabled != null) {
-      enabledSet = new HashSet<String>(Arrays.asList(enabled));
+      enabledSet = new HashSet<>(Arrays.asList(enabled));
     }
   }
 }

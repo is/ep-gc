@@ -7,9 +7,9 @@ import java.util.LinkedList;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import ep.common.EmissionSourceConfig;
 import ep.common.FileSystemEmissionSourceConfig;
 import ep.geoschem.Configuration;
-import ep.common.EmissionSourceConfig;
 import ep.geoschem.Target;
 import ucar.ma2.InvalidRangeException;
 
@@ -70,7 +70,7 @@ public class ConfigSample {
     c2.init();
 
     System.out.println(c2);
-    String ss[] = c2.getSourceSectors("NH3", "Power", "EDGAR");
+    // String ss[] = c2.getSourceSectors("NH3", "Power", "EDGAR");
     System.out.println(c2.getSourceSectors("NH3", "Power", "EDGAR"));
     System.out.println(c2.getYearIndex("EMEP", "1974"));
     System.out.println(c2.getYearIndex("EMEP", "2008"));
