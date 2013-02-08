@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ep.common.EmissionSourceConfig;
 import ep.common.FileSystemEmissionSourceConfig;
 import ep.geoschem.Configuration;
 import ep.geoschem.Target;
@@ -28,7 +27,7 @@ public class ConfigSample {
     esc0.dateStep = "yearly";
     esc0.basePath = "data/in";
     esc0.pathTemplate = "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
-    esc0.speciesAliases = new HashMap<String, String>();
+    esc0.speciesAliases = new HashMap<>();
     esc0.speciesAliases.put("SO2", "SOx");
 
     FileSystemEmissionSourceConfig esc1 = new FileSystemEmissionSourceConfig();
@@ -39,7 +38,7 @@ public class ConfigSample {
       "v42_<es.species>_<es.date>_IPCC_<es.sector>.0.1x0.1.nc|||" +
       "emi_<es.speciesLower>";
 
-    cf.emissionConfigs = new HashMap<String, EmissionSourceConfig>();
+    cf.emissionConfigs = new HashMap<>();
     cf.emissionConfigs.put(esc0.name, esc0);
     cf.emissionConfigs.put(esc1.name, esc1);
 
@@ -54,7 +53,7 @@ public class ConfigSample {
     target.pathTemplate = "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
     target.init();
 
-    cf.targets = new LinkedList<Target>();
+    cf.targets = new LinkedList<>();
     cf.targets.add(target);
 
     ObjectMapper om = new ObjectMapper();
