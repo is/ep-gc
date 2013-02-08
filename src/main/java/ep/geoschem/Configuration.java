@@ -24,6 +24,8 @@ import ep.common.EmissionSource;
 import ep.common.EmissionSourceConfig;
 import ep.common.FileSystemEmissionSource;
 import ep.common.FileSystemEmissionSourceConfig;
+import ep.common.GridFactor;
+import ep.common.ScalarMonthlyTimeFactor;
 import ucar.ma2.InvalidRangeException;
 
 
@@ -35,6 +37,7 @@ public class Configuration {
   public String root;
   public String conf;
   public String defaultEmission;
+  public GridFactor csvTimeFactor;
 
   // @JsonIgnore
   public String species[];
@@ -76,6 +79,10 @@ public class Configuration {
     for (Map.Entry<String, EmissionSourceConfig> e : emissionConfigs.entrySet()) {
       EmissionSource es = null;
       EmissionSourceConfig esc = e.getValue();
+
+      // simple scalar timefactor.
+      if ("csv".equals(esc.timeFactorType))
+        esc.timeFactor = csvTimeFactor;
 
       if (esc instanceof FileSystemEmissionSourceConfig) {
         es = new FileSystemEmissionSource((FileSystemEmissionSourceConfig) esc);
@@ -214,7 +221,14 @@ public class Configuration {
     }
   }
 
+  public void initTimeFactorCSV() throws IOException {
+    ScalarMonthlyTimeFactor timeFactor = new ScalarMonthlyTimeFactor();
+    timeFactor.loadFromCSV(new File(conf, "timefactor.csv"));
+    this.csvTimeFactor = timeFactor;
+  }
+
   public void init() throws IOException, InvalidRangeException {
+    initTimeFactorCSV();
     initEmissionSources();
     initSectorMapper();
     initYearIndex();
