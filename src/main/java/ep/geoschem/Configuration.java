@@ -67,11 +67,11 @@ public class Configuration {
 
 
   void initEmissionSources() throws IOException, InvalidRangeException {
-    emissionSources = new HashMap<String, EmissionSource>();
+    emissionSources = new HashMap<>();
     emissions = Iterables.toArray(emissionConfigs.keySet(), String.class);
 
     Arrays.sort(emissions);
-    emissionSources = new HashMap<String, EmissionSource>();
+    emissionSources = new HashMap<>();
     emissions = Iterables.toArray(emissionConfigs.keySet(), String.class);
 
     Arrays.sort(emissions);
@@ -81,6 +81,8 @@ public class Configuration {
       EmissionSourceConfig esc = e.getValue();
 
       // simple scalar timefactor.
+      if (esc.timeFactorType == null)
+        esc.timeFactorType = "csv";
       if ("csv".equals(esc.timeFactorType))
         esc.timeFactor = csvTimeFactor;
 
@@ -96,20 +98,20 @@ public class Configuration {
 
 
   void initSectorMapper() throws IOException {
-    HashSet species = new HashSet();
-    HashSet sectors = new HashSet();
+    HashSet<String> species = new HashSet<>();
+    HashSet<String> sectors = new HashSet<>();
 
-    sectorMapper = new HashMap<String, SectorTable>();
+    sectorMapper = new HashMap<>();
     CsvSchema schema = CsvSchema.emptySchema().withHeader();
     ObjectMapper mapper = new CsvMapper();
 
-    MappingIterator<Map> it = mapper.reader(Map.class).
+    MappingIterator<Map<String, String>> it = mapper.reader(Map.class).
       with(schema).readValues(new File(conf, "sector_map.csv"));
 
     Splitter splitter = Splitter.on(',').trimResults();
 
     while (it.hasNext()) {
-      Map<String, String> row = (Map<String, String>) it.next();
+      Map<String, String> row = it.next();
       String sp = row.get("SPECIES");
       String es = row.get("SOURCE");
       String st = row.get("SECTOR");
@@ -129,7 +131,7 @@ public class Configuration {
       SectorTable sm = sectorMapper.get(key);
       if (sm == null) {
         sm = new SectorTable();
-        sm.sectors = new HashMap<String, String[]>();
+        sm.sectors = new HashMap<>();
         sectorMapper.put(key, sm);
       }
 
@@ -143,20 +145,19 @@ public class Configuration {
 
 
   void initYearIndex() throws IOException {
-    yearIndex = new HashMap<String,String>();
+    yearIndex = new HashMap<>();
 
     CsvSchema schema = CsvSchema.emptySchema().withHeader();
     ObjectMapper mapper = new CsvMapper();
 
-    MappingIterator<Map> it = mapper.reader(Map.class).
+    MappingIterator<Map<String, String>> it = mapper.reader(Map.class).
       with(schema).readValues(new File(conf, "year_source.csv"));
 
     beginYear = 99999;
     endYear = 1;
 
     while(it.hasNext()) {
-
-      Map<String, String> row = (Map<String, String>)it.next();
+      Map<String, String> row = it.next();
       String year = row.get("YEAR");
       int nYear = Integer.parseInt(year);
       if (nYear > endYear) {
@@ -221,18 +222,21 @@ public class Configuration {
     }
   }
 
-  public void initTimeFactorCSV() throws IOException {
+
+  public void initCSVTimeFactor() throws IOException {
     ScalarMonthlyTimeFactor timeFactor = new ScalarMonthlyTimeFactor();
-    timeFactor.loadFromCSV(new File(conf, "timefactor.csv"));
+    timeFactor.loadFromCSV(new File(conf, "timefactor_monthly.csv"));
     this.csvTimeFactor = timeFactor;
   }
 
+
   public void init() throws IOException, InvalidRangeException {
-    initTimeFactorCSV();
+    initCSVTimeFactor();
     initEmissionSources();
     initSectorMapper();
     initYearIndex();
   }
+
 
   public EmissionSource getEmissionSource(String emission) {
     return emissionSources.get(emission);
