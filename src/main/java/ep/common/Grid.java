@@ -101,6 +101,17 @@ public class Grid {
   }
 
 
+  public void floatScale(float f) {
+    long size = getSize();
+
+    float[] array = (float[])surface.getStorage();
+
+    for (int i = 0; i < size; ++i) {
+      array[i] *= f;
+    }
+  }
+
+
   public void floatScale2(Grid baseFactor, Grid targetFactor) {
     if (getSize() != baseFactor.getSize())
       throw new IllegalArgumentException("not equal grid added (base): " + getSize() + " + " + baseFactor.getSize());
