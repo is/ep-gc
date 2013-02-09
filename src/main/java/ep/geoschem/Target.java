@@ -21,8 +21,8 @@ public class Target {
   public String pathTemplate;
   public String beginDate, endDate;
 
-  @JsonIgnore
-  public Set<String> enabledSet;
+  @JsonIgnore public Set<String> enabledSet;
+  @JsonIgnore public Configuration up;
 
   public void init() {
 

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.base.Joiner;
 import ep.common.FileSystemEmissionSourceConfig;
 import ep.geoschem.Configuration;
 import ep.geoschem.Target;
@@ -25,16 +26,16 @@ public class ConfigSample {
     FileSystemEmissionSourceConfig esc0 = new FileSystemEmissionSourceConfig();
     esc0.name = "EMEP";
     esc0.dateStep = "yearly";
-    esc0.basePath = "data/in";
-    esc0.pathTemplate = "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
+    esc0.basePath = "in";
+    esc0.pathTemplate = "<cf.up.root>/<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
     esc0.speciesAliases = new HashMap<>();
     esc0.speciesAliases.put("SO2", "SOx");
 
     FileSystemEmissionSourceConfig esc1 = new FileSystemEmissionSourceConfig();
     esc1.name = "EDGAR";
     esc1.dateStep = "yearly";
-    esc1.basePath = "data/in";
-    esc1.pathTemplate = "<cf.basePath>/<es.name>/<es.species>/" +
+    esc1.basePath = "in";
+    esc1.pathTemplate = "<cf.up.root>/<cf.basePath>/<es.name>/<es.species>/" +
       "v42_<es.species>_<es.date>_IPCC_<es.sector>.0.1x0.1.nc|||" +
       "emi_<es.speciesLower>";
 
@@ -43,14 +44,14 @@ public class ConfigSample {
     cf.emissionConfigs.put(esc1.name, esc1);
 
     Target target = new Target();
-    target.name = "middle";
+    target.name = "o0";
     target.beginDate = "200301";
     target.endDate = "200412";
-    target.base = "data/o0";
+    target.base = "o0";
     target.dateStep = "monthly";
     target.shape = new int[] {900, 1800};
     target.enabled = new String[] {"EDGAR"};
-    target.pathTemplate = "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
+    target.pathTemplate = "<ta.up.root>/<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
     target.init();
 
     cf.targets = new LinkedList<>();
@@ -70,7 +71,7 @@ public class ConfigSample {
 
     System.out.println(c2);
     // String ss[] = c2.getSourceSectors("NH3", "Power", "EDGAR");
-    System.out.println(c2.getSourceSectors("NH3", "Power", "EDGAR"));
+    System.out.println(Joiner.on(',').join(c2.getSourceSectors("NH3", "Power", "EDGAR")));
     System.out.println(c2.getYearIndex("EMEP", "1974"));
     System.out.println(c2.getYearIndex("EMEP", "2008"));
 

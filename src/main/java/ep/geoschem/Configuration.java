@@ -263,6 +263,7 @@ public class Configuration {
     targets = mapper.readValue(new File("cfg.target.js"), type);
     for (Target t: targets) {
       t.init();
+      t.up = this;
     }
   }
 }
