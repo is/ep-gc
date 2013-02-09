@@ -26,7 +26,7 @@ import ep.common.FileSystemEmissionSource;
 import ep.common.FileSystemEmissionSourceConfig;
 import ep.common.GridFactor;
 import ep.common.ScalarMonthlyTimeFactor;
-import ep.common.VocFactor_;
+import ep.common.VocFactor;
 import ucar.ma2.InvalidRangeException;
 
 
@@ -235,7 +235,7 @@ public class Configuration {
 
 
   public void initVocFactor() throws IOException {
-    VocFactor_ factor = new VocFactor_();
+    VocFactor factor = new VocFactor();
     factor.loadFromCSV(new File(conf, "vocfactor.csv"));
     this.vocFactor = factor;
   }

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.base.Strings;
 
-public class VocFactor_ implements GridFactor {
+public class VocFactor implements GridFactor {
   public Map<String, Float> vocMap;
 
   public void loadFromCSV(File fin) throws IOException {
