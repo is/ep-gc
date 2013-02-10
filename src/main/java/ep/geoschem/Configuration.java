@@ -146,12 +146,7 @@ public class Configuration {
 
   void initYearIndex() throws IOException {
     yearIndex = new HashMap<>();
-
-    CsvSchema schema = CsvSchema.emptySchema().withHeader();
-    ObjectMapper mapper = new CsvMapper();
-
-    MappingIterator<Map<String, String>> it = mapper.reader(Map.class).
-      with(schema).readValues(new File(conf, "year_source.csv"));
+    MappingIterator<Map<String, String>> it = CsvUtil.read(new File(conf, "year_source.csv"));
 
     beginYear = 99999;
     endYear = 1;

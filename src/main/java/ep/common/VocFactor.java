@@ -15,12 +15,8 @@ public class VocFactor implements GridFactor {
   public Map<String, Float> vocMap;
 
   public void loadFromCSV(File fin) throws IOException {
-    CsvSchema schema = CsvSchema.emptySchema().withHeader();
-    ObjectMapper mapper = new CsvMapper();
-
     vocMap = new HashMap<>();
-    MappingIterator<Map<String, String>> it = mapper.reader(Map.class).
-      with(schema).readValues(fin);
+    MappingIterator<Map<String, String>> it = CsvUtil.read(fin);
 
     while(it.hasNext()) {
       Map<String, String> row = it.next();
