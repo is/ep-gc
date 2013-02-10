@@ -15,14 +15,14 @@ import ep.geoschem.Configuration;
 import ep.geoschem.Target;
 import org.stringtemplate.v4.ST;
 
-public class NCBuilder {
+public class GridSetBuilder {
   DataSetBuilder parent;
 
   Configuration conf;
   Target target;
   GridSet gs;
 
-  public NCBuilder(DataSetBuilder parent) {
+  public GridSetBuilder(DataSetBuilder parent) {
     this.parent = parent;
     this.target = parent.getTarget();
     this.conf = parent.getConf();

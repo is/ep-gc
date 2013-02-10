@@ -83,9 +83,9 @@ public class DataSetBuilder {
     initGridCluster();
     ArrayList<String> ncFiles = new ArrayList<>(gridClusters.keySet());
 
-    NCBuilder ncBuilder = new NCBuilder(this);
+    GridSetBuilder gridSetBuilder = new GridSetBuilder(this);
     for (String ncFile: ncFiles) {
-      ncBuilder.build(ncFile);
+      gridSetBuilder.build(ncFile);
     }
   }
 }

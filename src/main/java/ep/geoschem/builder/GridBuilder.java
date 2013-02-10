@@ -12,10 +12,10 @@ public class GridBuilder {
   Configuration conf;
   Target target;
 
-  NCBuilder parent;
+  GridSetBuilder parent;
   DataSetBuilder root;
 
-  public GridBuilder(NCBuilder parent) {
+  public GridBuilder(GridSetBuilder parent) {
     this.parent = parent;
     this.root = parent.getParent();
 
