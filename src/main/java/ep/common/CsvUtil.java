@@ -15,4 +15,10 @@ public class CsvUtil {
     ObjectMapper om = new CsvMapper();
     return om.reader(Map.class).with(schema).readValues(fi);
   }
+
+  public static<T> MappingIterator<T> read(File fi, Class<T> clazz) throws IOException {
+    CsvSchema schema = CsvSchema.emptySchema().withHeader();
+    ObjectMapper om = new CsvMapper();
+    return om.reader(clazz).with(schema).readValues(fi);
+  }
 }
