@@ -1,6 +1,6 @@
 package ep.common;
 
-public class FileSystemEmissionSourceConfig extends EmissionSourceConfig {
+public class FileSystemSourceConfig extends SourceConfig {
   public String basePath;
   public String pathTemplate;
 }

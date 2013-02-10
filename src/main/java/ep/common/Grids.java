@@ -89,7 +89,7 @@ public class Grids {
 
   public static Grid getCombinedGridding(
     int outShape[],
-    EmissionSource es, String name, String date,
+    Source es, String name, String date,
     String species, String sectors[]) throws Exception {
 
     Grid res = empty(outShape);

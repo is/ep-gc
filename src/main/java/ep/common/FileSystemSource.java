@@ -7,14 +7,14 @@ import com.google.common.base.Splitter;
 import org.stringtemplate.v4.ST;
 import ucar.ma2.InvalidRangeException;
 
-public class FileSystemEmissionSource implements EmissionSource {
-  FileSystemEmissionSourceConfig conf;
+public class FileSystemSource implements Source {
+  FileSystemSourceConfig conf;
   ST pathSTTemplate;
   Splitter pathSplitter;
   Grid factoryArray;
 
 
-  public FileSystemEmissionSource(FileSystemEmissionSourceConfig conf) throws IOException, InvalidRangeException {
+  public FileSystemSource(FileSystemSourceConfig conf) throws IOException, InvalidRangeException {
     this.conf = conf;
     this.pathSplitter = Splitter.on("|||");
 

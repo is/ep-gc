@@ -2,21 +2,21 @@ package ep.geoschem.demo;
 
 
 import ep.common.ESID;
-import ep.common.FileSystemEmissionSource;
-import ep.common.FileSystemEmissionSourceConfig;
+import ep.common.FileSystemSource;
+import ep.common.FileSystemSourceConfig;
 import ep.common.Grid;
 import ep.common.Grids;
 
 public class EmissionSourceSample {
   public static void main(String args[]) throws Exception {
-    FileSystemEmissionSourceConfig esConf = new FileSystemEmissionSourceConfig();
+    FileSystemSourceConfig esConf = new FileSystemSourceConfig();
     esConf.basePath = "data/in";
     esConf.pathTemplate =
       "<cf.basePath>/<es.name>/<es.species>/" +
         "v42_<es.species>_<es.date>_IPCC_<es.sector>.0.1x0.1.nc|||" +
         "emi_<es.speciesLower>";
 
-    FileSystemEmissionSource es = new FileSystemEmissionSource(esConf);
+    FileSystemSource es = new FileSystemSource(esConf);
     Grid g; //  = es.getGridding(new ESID("edgar", "2004", "SO2", "7A"));
     g = es.getGridding(new ESID("edgar", "2004", "SO2", "7A"));
     System.out.println(g.getShape());

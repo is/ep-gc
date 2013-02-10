@@ -20,13 +20,9 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
-import ep.common.EmissionSource;
-import ep.common.EmissionSourceConfig;
-import ep.common.FileSystemEmissionSource;
-import ep.common.FileSystemEmissionSourceConfig;
-import ep.common.GridFactor;
-import ep.common.ScalarMonthlyTimeFactor;
-import ep.common.VocFactor;
+import ep.common.*;
+import ep.common.FileSystemSource;
+import ep.common.Source;
 import ucar.ma2.InvalidRangeException;
 
 
@@ -47,7 +43,7 @@ public class Configuration {
   public String sectors[];
   // @JsonIgnore
   public String emissions[];
-  @JsonIgnore public Map<String, EmissionSource> emissionSources;
+  @JsonIgnore public Map<String, Source> emissionSources;
   //@JsonIgnore
   public Map<String, SectorTable> sectorMapper;
   //@JsonIgnore
@@ -61,7 +57,7 @@ public class Configuration {
   public List<Target> targets;
 
   @JsonProperty("esconf")
-  public Map<String, EmissionSourceConfig> emissionConfigs;
+  public Map<String, SourceConfig> emissionConfigs;
 
   public static class SectorTable {
     public Map<String, String[]> sectors;
@@ -78,9 +74,9 @@ public class Configuration {
 
     Arrays.sort(emissions);
 
-    for (Map.Entry<String, EmissionSourceConfig> e : emissionConfigs.entrySet()) {
-      EmissionSource es = null;
-      EmissionSourceConfig esc = e.getValue();
+    for (Map.Entry<String, SourceConfig> e : emissionConfigs.entrySet()) {
+      Source es = null;
+      SourceConfig esc = e.getValue();
 
       esc.up = this;
 
@@ -90,8 +86,8 @@ public class Configuration {
       if ("csv".equals(esc.timeFactorType))
         esc.timeFactor = csvTimeFactor;
 
-      if (esc instanceof FileSystemEmissionSourceConfig) {
-        es = new FileSystemEmissionSource((FileSystemEmissionSourceConfig) esc);
+      if (esc instanceof FileSystemSourceConfig) {
+        es = new FileSystemSource((FileSystemSourceConfig) esc);
       }
 
       if (es != null) {
@@ -250,7 +246,7 @@ public class Configuration {
   }
 
 
-  public EmissionSource getEmissionSource(String emission) {
+  public Source getEmissionSource(String emission) {
     return emissionSources.get(emission);
   }
 

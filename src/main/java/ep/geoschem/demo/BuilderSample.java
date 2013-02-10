@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import ep.common.FileSystemEmissionSourceConfig;
+import ep.common.FileSystemSourceConfig;
 import ep.geoschem.Configuration;
 import ep.geoschem.Target;
 import ep.geoschem.builder.DataSetBuilder;
@@ -20,17 +20,17 @@ public class BuilderSample {
     cf.emissions = new String[] {"EDGAR", "EMEP", "MEIC"};
     cf.sectors = new String[] {"power", "industry", "residential", "transporation", "agriculture"};
 
-    FileSystemEmissionSourceConfig esc0 = new FileSystemEmissionSourceConfig();
+    FileSystemSourceConfig esc0 = new FileSystemSourceConfig();
     esc0.name = "EMEP";
-    esc0.dateStep = "yearly";
+    esc0.timeScale = "year";
     esc0.basePath = "data/in";
     esc0.pathTemplate = "<cf.basePath>/<es.nameLower>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.year>_0.5x0.5.nc|||<es.species>_<es.sector>";
     esc0.speciesAliases = new HashMap<>();
     esc0.speciesAliases.put("SO2", "SOx");
 
-    FileSystemEmissionSourceConfig esc1 = new FileSystemEmissionSourceConfig();
+    FileSystemSourceConfig esc1 = new FileSystemSourceConfig();
     esc1.name = "EDGAR";
-    esc1.dateStep = "yearly";
+    esc1.timeScale = "year";
     esc1.basePath = "data/in";
     esc1.pathTemplate = "<cf.basePath>/<es.nameLower>/<es.species>/" +
       "v42_<es.species>_<es.year>_IPCC_<es.sector>.0.1x0.1.nc|||" +

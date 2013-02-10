@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Joiner;
-import ep.common.FileSystemEmissionSourceConfig;
+import ep.common.FileSystemSourceConfig;
 import ep.geoschem.Configuration;
 import ep.geoschem.Target;
 import ucar.ma2.InvalidRangeException;
@@ -23,17 +23,17 @@ public class ConfigSample {
     cf.emissions = new String[] {"EDGAR", "EMEP", "MEIC"};
     cf.sectors = new String[] {"power", "industry", "residential", "transporation", "agriculture"};
 
-    FileSystemEmissionSourceConfig esc0 = new FileSystemEmissionSourceConfig();
+    FileSystemSourceConfig esc0 = new FileSystemSourceConfig();
     esc0.name = "EMEP";
-    esc0.dateStep = "yearly";
+    esc0.timeScale = "year";
     esc0.basePath = "in";
     esc0.pathTemplate = "<cf.up.root>/<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>";
     esc0.speciesAliases = new HashMap<>();
     esc0.speciesAliases.put("SO2", "SOx");
 
-    FileSystemEmissionSourceConfig esc1 = new FileSystemEmissionSourceConfig();
+    FileSystemSourceConfig esc1 = new FileSystemSourceConfig();
     esc1.name = "EDGAR";
-    esc1.dateStep = "yearly";
+    esc1.timeScale = "year";
     esc1.basePath = "in";
     esc1.pathTemplate = "<cf.up.root>/<cf.basePath>/<es.name>/<es.species>/" +
       "v42_<es.species>_<es.date>_IPCC_<es.sector>.0.1x0.1.nc|||" +
