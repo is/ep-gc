@@ -83,4 +83,8 @@ public class GenConf {
       sources.put(gcs.name, gcs);
     }
   }
+
+  public GenConfSource getSource(String sn) {
+    return sources.get(sn);
+  }
 }

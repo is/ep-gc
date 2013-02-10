@@ -1,4 +1,4 @@
 package ep.geoschem.demo.gen;
 
-public class GenerateDataSet0 {
+public class GenDataSet0 {
 }
