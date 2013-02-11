@@ -20,8 +20,6 @@ import ucar.ma2.InvalidRangeException;
 public class Generater {
   GenConf cf;
 
-
-
   public void init(File conf) throws IOException {
     ObjectMapper om = new ObjectMapper();
     cf = om.readValue(conf, GenConf.class);

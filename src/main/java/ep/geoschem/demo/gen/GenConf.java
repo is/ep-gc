@@ -20,12 +20,12 @@ public class GenConf {
   Map<String, String> yearIndex;
 
   public MappingIterator<Map<String, String>> readCsv(String id) throws IOException {
-    return CsvUtil.read(new File(new File(conf, "gen"), name + "." + id + ".csv"));
+    return CsvUtil.read(new File(new File(conf, "gen"), name + "_" + id + ".csv"));
   }
 
 
   public <T> MappingIterator<T> readCsv(String id, Class<T> clazz) throws IOException {
-    return CsvUtil.read(new File(new File(conf, "gen"), name + "." + id + ".csv"), clazz);
+    return CsvUtil.read(new File(new File(conf, "gen"), name + "_" + id + ".csv"), clazz);
   }
 
 
@@ -73,11 +73,18 @@ public class GenConf {
   }
 
   private void initSources() throws IOException {
+    sources = new HashMap<>();
+
     MappingIterator<Map<String, String>> it = readCsv("source");
 
     while (it.hasNext()) {
       Map<String, String> row = it.next();
       GenConfSource gcs = new GenConfSource();
+      String name = row.get("SOURCE");
+      if (Strings.isNullOrEmpty(name)) {
+        continue;
+      }
+
       gcs.init(row);
       gcs.up = this;
       sources.put(gcs.name, gcs);
