@@ -8,7 +8,7 @@ import ucar.ma2.InvalidRangeException;
 public class GenDataSet0 extends Generater {
   public static void main(String args[]) throws IOException, InvalidRangeException {
     GenDataSet0 g = new GenDataSet0();
-    g.init(new File("conf/gen/ds0.js"));
+    g.init(new File("conf/gen/ds0/gen.js"));
     g.gen();
   }
 }

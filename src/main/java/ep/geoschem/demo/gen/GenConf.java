@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.MappingIterator;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import ep.common.CsvUtil;
 
@@ -15,17 +16,20 @@ public class GenConf {
   public String conf;
   public String name;
 
-
   Map<String, GenConfSource> sources;
   Map<String, String> yearIndex;
 
-  public MappingIterator<Map<String, String>> readCsv(String id) throws IOException {
-    return CsvUtil.read(new File(new File(conf, "gen"), name + "_" + id + ".csv"));
+  File getCSVFile(String id) {
+    Joiner joiner = Joiner.on(File.separator);
+    return new File(joiner.join(new String[] {conf, "gen", name, id + ".csv"}));
   }
 
+  public MappingIterator<Map<String, String>> readCsv(String id) throws IOException {
+    return CsvUtil.read(getCSVFile(id));
+  }
 
   public <T> MappingIterator<T> readCsv(String id, Class<T> clazz) throws IOException {
-    return CsvUtil.read(new File(new File(conf, "gen"), name + "_" + id + ".csv"), clazz);
+    return CsvUtil.read(getCSVFile(id), clazz);
   }
 
 
