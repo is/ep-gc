@@ -1,0 +1,9 @@
+SOURCE,TIMESCALE,LAT,LON,SPECIESLIST,TEMPLATE
+EDGAR,year,180,360,"CO,NH3,NMVOC,NOx,PM10,SO2",<cf.up.root>/<es.name>/<es.species>/v42_<es.species>_<es.year>_IPCC_<es.sector>.nc|||emi_<es.speciesLower>
+EMEP,year,180,360,"CO,NH3,NMVOC,NOx,PM10,SO2",<cf.up.root>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.year>.nc|||<es.species>_<es.sector>
+MEIC,month,180,360,"CO,NH3,NMVOC,NOx,PM10,SO2",<cf.up.root>/<es.name>/<es.year>/MEIC-<es.month>.nc|||<es.species>_<es.sector>
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
