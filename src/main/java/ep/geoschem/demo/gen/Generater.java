@@ -2,22 +2,23 @@ package ep.geoschem.demo.gen;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import ep.common.Grid;
 import ep.common.GridSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ucar.ma2.InvalidRangeException;
 
 public class Generater {
+
+  static Logger logger = LoggerFactory.getLogger(Generater.class);
+
+  Set<String> sources;
+  Set<String> years;
 
   GenConf cf;
 
@@ -41,22 +42,31 @@ public class Generater {
 
 
   public void gen() throws IOException, InvalidRangeException {
+
     Map<String, List<GridTask>> taskCluster = new HashMap<>();
     Splitter commaSplitter = Splitter.on(',').trimResults();
 
     List<String> bigTasks = new LinkedList<>();
 
-    for (Map.Entry<String, String> yie: cf.yearIndex.entrySet()) {
+
+    sources = new HashSet<>();
+    years = new HashSet<>();
+
+    for (Map.Entry<String, String> yie : cf.yearIndex.entrySet()) {
       if (yie.getValue().equals("0"))
         continue;
 
       List<String> yiTokens = Lists.newArrayList(commaSplitter.split(yie.getKey()));
 
       String sn = yiTokens.get(0);
+      String year = yiTokens.get(1);
 
       GenConfSource gcs = cf.getSource(sn);
       if (gcs == null)
         continue;
+
+      sources.add(sn);
+      years.add(year);
 
       bigTasks.add(yie.getKey());
     }
@@ -64,7 +74,8 @@ public class Generater {
 
     List<String> dates = new ArrayList<>(20);
 
-    for (String snyear: bigTasks) {
+    int nTasks = 0;
+    for (String snyear : bigTasks) {
       List<String> yiTokens = Lists.newArrayList(commaSplitter.split(snyear));
 
       String sn = yiTokens.get(0);
@@ -81,8 +92,8 @@ public class Generater {
         dates.add(year);
       }
 
-      for (String date: dates) {
-        for (GenConfGrid gcf: gcs.grids) {
+      for (String date : dates) {
+        for (GenConfGrid gcf : gcs.grids) {
           GridTask task = new GridTask(gcf, date);
           task.init();
 
@@ -92,9 +103,15 @@ public class Generater {
             taskCluster.put(task.path, tasks);
           }
           tasks.add(task);
+          ++nTasks;
         }
       }
     }
+
+    logger.info("gen {}, root is {}", cf.name, cf.root);
+    logger.info("{} sources, {} years, {} gridsets, {} grids",
+      sources.size(), years.size(),
+      taskCluster.size(), nTasks);
 
     List<String> fns = new ArrayList<>(taskCluster.keySet());
     Collections.sort(fns);
@@ -105,24 +122,29 @@ public class Generater {
         return o1.var.compareTo(o2.var);
       }
     };
-
     GenGridSimple genGridSimple = new GenGridSimple();
 
-    for (String fn: fns) {
+    for (String fn : fns) {
       File outFile = new File(fn);
       outFile.getParentFile().mkdirs();
       List<GridTask> tasks = taskCluster.get(fn);
 
-      GridSet gs = new GridSet(fn, tasks.get(0).cf.up.shape);
+
+      int shape[] = tasks.get(0).cf.up.shape;
+      String sn = tasks.get(0).cf.up.name;
+
+      logger.debug("create {}: {}, {}x{}, {} vars",
+        sn, fn, shape[0], shape[1], tasks.size());
+
+      GridSet gs = new GridSet(fn, shape);
       gs.open();
       Collections.sort(tasks, gridTaskComparator);
-      for (GridTask task: tasks) {
-        GenGrid gg = null;
 
+      for (GridTask task : tasks) {
+        GenGrid gg = null;
         if (task.cf.grid.equals("SIMPLE")) {
           gg = genGridSimple;
         }
-
 
         Grid g = gg.gen(task.cf, task.esid, task.cf.params);
         gs.addGridding(task.var, null, g);
