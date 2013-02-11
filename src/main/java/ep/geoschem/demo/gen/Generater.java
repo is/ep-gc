@@ -18,12 +18,18 @@ import ep.common.GridSet;
 import ucar.ma2.InvalidRangeException;
 
 public class Generater {
+
   GenConf cf;
 
   public void init(File conf) throws IOException {
     ObjectMapper om = new ObjectMapper();
     cf = om.readValue(conf, GenConf.class);
     cf.init();
+  }
+
+
+  public void init(String name) throws IOException {
+    init(new File("conf/gen/" + name + "/gen.js"), name);
   }
 
   public void init(File conf, String name) throws IOException {
