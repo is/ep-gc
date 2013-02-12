@@ -239,7 +239,8 @@ public class GCConfiguration extends ep.common.Configuration{
     if (vocSpecies != null) {
       vocFactor.vocs = Sets.newHashSet(vocSpecies);
     } else {
-      vocSpecies = (String[])factor.vocs.toArray();
+      vocSpecies = new String[factor.vocs.size()];
+      factor.vocs.toArray(vocSpecies);
     }
     this.vocFactor = factor;
   }

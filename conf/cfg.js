@@ -17,10 +17,7 @@
       "basePath" : "data/in",
       "dateStep" : "yearly",
       "name" : "EMEP",
-      "pathTemplate" : "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>",
-      "speciesAliases" : {
-        "SO2" : "SOx"
-      }
+      "pathTemplate" : "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>"
     }
   },
   "beginYear" : 1970,
