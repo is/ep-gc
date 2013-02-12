@@ -1,4 +1,0 @@
-{
-  "root": "data",
-  "conf": "conf"
-}
