@@ -15,8 +15,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
@@ -59,16 +57,23 @@ public class GCConfiguration extends ep.common.Configuration{
     public Map<String, String[]> sectors;
   }
 
+
   public static GCConfiguration load(File filePath) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     GCConfiguration cf = mapper.readValue(filePath, GCConfiguration.class);
     return cf;
   }
 
+
   public static GCConfiguration load(String json) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     GCConfiguration cf = mapper.readValue(json, GCConfiguration.class);
     return cf;
+  }
+
+
+  File getConfFile(String fn) {
+    return new File(conf, fn);
   }
 
 
@@ -110,14 +115,9 @@ public class GCConfiguration extends ep.common.Configuration{
   void initSectorMapper() throws IOException {
     HashSet<String> species = new HashSet<>();
     HashSet<String> sectors = new HashSet<>();
-
     sectorMapper = new HashMap<>();
-    CsvSchema schema = CsvSchema.emptySchema().withHeader();
-    ObjectMapper mapper = new CsvMapper();
 
-    MappingIterator<Map<String, String>> it = mapper.reader(Map.class).
-      with(schema).readValues(new File(conf, "sector_map.csv"));
-
+    MappingIterator<Map<String, String>> it = CsvUtil.read(getConfFile("sector_map.csv"));
     Splitter splitter = Splitter.on(',').trimResults();
 
     while (it.hasNext()) {
@@ -156,7 +156,7 @@ public class GCConfiguration extends ep.common.Configuration{
 
   void initYearIndex() throws IOException {
     yearIndex = new HashMap<>();
-    MappingIterator<Map<String, String>> it = CsvUtil.read(new File(conf, "year_source.csv"));
+    MappingIterator<Map<String, String>> it = CsvUtil.read(getConfFile("year_source.csv"));
 
     beginYear = 99999;
     endYear = 1;
@@ -230,14 +230,14 @@ public class GCConfiguration extends ep.common.Configuration{
 
   public void initCsvTimeFactor() throws IOException {
     ScalarMonthlyTimeFactor timeFactor = new ScalarMonthlyTimeFactor();
-    timeFactor.init(new File(conf, "timefactor_monthly.csv"));
+    timeFactor.init(getConfFile("timefactor_monthly.csv"));
     this.csvTimeFactor = timeFactor;
   }
 
 
   public void initVocFactor() throws IOException {
     VocFactor factor = new VocFactor();
-    factor.init(new File(conf, "vocfactor.csv"));
+    factor.init(getConfFile("vocfactor.csv"));
     this.vocFactor = factor;
   }
 
@@ -271,7 +271,7 @@ public class GCConfiguration extends ep.common.Configuration{
   public void loadTargetConfig() throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, Target.class);
-    targets = mapper.readValue(new File("cfg.target.js"), type);
+    targets = mapper.readValue(getConfFile("target.js"), type);
     for (Target t: targets) {
       t.init();
       t.up = this;
