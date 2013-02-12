@@ -21,8 +21,6 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import ep.common.*;
-import ep.common.FileSystemSource;
-import ep.common.Source;
 import ucar.ma2.InvalidRangeException;
 
 
@@ -30,12 +28,10 @@ import ucar.ma2.InvalidRangeException;
   "root", "conf", "emissions", "species", "sectors",
   "esconf", "beginYear", "endYear", "yearmap"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Configuration {
-  public String root;
-  public String conf;
+public class GCConfiguration extends ep.common.Configuration{
   public String defaultEmission;
   public GridFactor csvTimeFactor;
-  public GridFactor vocFactor;
+  public VocFactor vocFactor;
 
   // @JsonIgnore
   public String species[];
@@ -79,6 +75,8 @@ public class Configuration {
       SourceConfig esc = e.getValue();
 
       esc.up = this;
+
+      esc.vocFactor = vocFactor;
 
       // simple scalar timefactor.
       if (esc.timeFactorType == null)
@@ -220,14 +218,14 @@ public class Configuration {
 
   public void initCsvTimeFactor() throws IOException {
     ScalarMonthlyTimeFactor timeFactor = new ScalarMonthlyTimeFactor();
-    timeFactor.loadFromCSV(new File(conf, "timefactor_monthly.csv"));
+    timeFactor.init(new File(conf, "timefactor_monthly.csv"));
     this.csvTimeFactor = timeFactor;
   }
 
 
   public void initVocFactor() throws IOException {
     VocFactor factor = new VocFactor();
-    factor.loadFromCSV(new File(conf, "vocfactor.csv"));
+    factor.init(new File(conf, "vocfactor.csv"));
     this.vocFactor = factor;
   }
 

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import ep.geoschem.Configuration;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
@@ -24,4 +23,5 @@ public class SourceConfig {
 
   @JsonIgnore public Configuration up;
   @JsonIgnore public GridFactor timeFactor;
+  @JsonIgnore public VocFactor vocFactor;
 }

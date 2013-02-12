@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Main {
   public static void main(String argv[]) throws IOException {
-    Configuration cf = Configurations.load(new File("cfg.js"));
+    GCConfiguration cf = Configurations.load(new File("cfg.js"));
 
     System.out.println(cf);
     System.out.println(cf.root);

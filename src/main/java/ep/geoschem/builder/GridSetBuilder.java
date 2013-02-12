@@ -11,14 +11,14 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import ep.common.ESID;
 import ep.common.GridSet;
-import ep.geoschem.Configuration;
+import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
 import org.stringtemplate.v4.ST;
 
 public class GridSetBuilder {
   DataSetBuilder parent;
 
-  Configuration conf;
+  GCConfiguration conf;
   Target target;
   GridSet gs;
 

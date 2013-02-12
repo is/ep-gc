@@ -9,13 +9,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Joiner;
 import ep.common.FileSystemSourceConfig;
-import ep.geoschem.Configuration;
+import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
 import ucar.ma2.InvalidRangeException;
 
 public class ConfigSample {
   public static void main(String args[]) throws IOException, InvalidRangeException {
-    Configuration cf = new Configuration();
+    GCConfiguration cf = new GCConfiguration();
 
     cf.root = "data";
     cf.conf = "conf";
@@ -64,7 +64,7 @@ public class ConfigSample {
 
     String cfStr = om.writeValueAsString(cf);
     System.out.println(cfStr);
-    Configuration c2 = om.readValue(cfStr,Configuration.class);
+    GCConfiguration c2 = om.readValue(cfStr,GCConfiguration.class);
 
     System.out.println(c2.emissionConfigs.get("EDGAR").name);
     c2.init();

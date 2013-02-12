@@ -5,11 +5,11 @@ import ep.common.ESID;
 import ep.common.Grid;
 import ep.common.GridSet;
 import ep.common.Grids;
-import ep.geoschem.Configuration;
+import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
 
 public class GridBuilder {
-  Configuration conf;
+  GCConfiguration conf;
   Target target;
 
   GridSetBuilder parent;

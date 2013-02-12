@@ -6,13 +6,13 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ep.common.FileSystemSourceConfig;
-import ep.geoschem.Configuration;
+import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
 import ep.geoschem.builder.DataSetBuilder;
 
 public class BuilderSample {
   public static void main(String args[]) throws Exception {
-    Configuration cf = new Configuration();
+    GCConfiguration cf = new GCConfiguration();
 
     cf.root = "data";
     cf.conf = "conf";
@@ -47,7 +47,7 @@ public class BuilderSample {
 
     String cfStr = om.writeValueAsString(cf);
     System.out.println(cfStr);
-    Configuration c2 = om.readValue(cfStr,Configuration.class);
+    GCConfiguration c2 = om.readValue(cfStr,GCConfiguration.class);
 
     System.out.println(c2.emissionConfigs.get("EDGAR").name);
     c2.init();

@@ -22,7 +22,7 @@ public class Target {
   public String beginDate, endDate;
 
   @JsonIgnore public Set<String> enabledSet;
-  @JsonIgnore public Configuration up;
+  @JsonIgnore public GCConfiguration up;
 
   public void init() {
 

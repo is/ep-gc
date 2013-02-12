@@ -10,18 +10,18 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import ep.common.DateRange;
 import ep.common.ESID;
-import ep.geoschem.Configuration;
+import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
 import org.stringtemplate.v4.ST;
 
 public class DataSetBuilder {
-  Configuration conf;
+  GCConfiguration conf;
   Target target;
 
   Map<String, List<ESID>> gridClusters;
 
 
-  public Configuration getConf() {
+  public GCConfiguration getConf() {
     return conf;
   }
 
@@ -33,7 +33,7 @@ public class DataSetBuilder {
     return gridClusters.get(fn);
   }
 
-  public DataSetBuilder(Configuration conf, Target target) {
+  public DataSetBuilder(GCConfiguration conf, Target target) {
     this.conf = conf;
     this.target = target;
   }
