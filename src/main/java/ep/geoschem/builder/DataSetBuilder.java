@@ -44,11 +44,15 @@ public class DataSetBuilder {
     DateRange range = new DateRange(target.beginDate, target.endDate);
     Splitter splitter = Splitter.on("|||");
 
+    List<String> speciesList = Lists.newArrayList(conf.species);
+    if (conf.vocSpecies != null) {
+      speciesList.addAll(Lists.newArrayList(conf.vocSpecies));
+    }
 
     for (String date : range) {
     //  for (String es : conf.emissions) {
         for (String sector : conf.sectors) {
-          for (String species : conf.species) {
+          for (String species : speciesList) {
             ESID esid = new ESID(target.name, date, species, sector);
 
             ST st = new ST(target.pathTemplate);
@@ -71,11 +75,6 @@ public class DataSetBuilder {
         }
       //}
     }
-
-//    System.out.println(gridClusters.size() + " grid sets");
-//    for (String s: gridClusters.keySet()) {
-//      System.out.println(s);
-//    }
   }
 
 

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import ep.common.*;
 import ucar.ma2.InvalidRangeException;
 
@@ -33,6 +34,7 @@ public class GCConfiguration extends ep.common.Configuration{
 
   // @JsonIgnore
   public String species[];
+  public String vocSpecies[];
   // @JsonIgnore
   public String sectors[];
   // @JsonIgnore
@@ -238,6 +240,11 @@ public class GCConfiguration extends ep.common.Configuration{
   public void initVocFactor() throws IOException {
     VocFactor factor = new VocFactor();
     factor.init(getConfFile("vocfactor.csv"));
+    if (vocSpecies != null) {
+      vocFactor.vocs = Sets.newHashSet(vocSpecies);
+    } else {
+      vocSpecies = (String[])vocFactor.vocs.toArray();
+    }
     this.vocFactor = factor;
   }
 
