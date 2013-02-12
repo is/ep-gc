@@ -15,7 +15,7 @@ public class ScalarMonthlyTimeFactor implements GridFactor {
 
   public Map<String, float[]> factors;
 
-  public void loadFromCSV(File fin) throws IOException {
+  public void init(File fin) throws IOException {
     factors = new HashMap<>();
     MappingIterator<Map<String, String>> it = CsvUtil.read(fin);
 

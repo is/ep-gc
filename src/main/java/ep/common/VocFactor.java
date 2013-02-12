@@ -3,19 +3,23 @@ package ep.common;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.base.Strings;
 
 public class VocFactor implements GridFactor {
   public Map<String, Float> vocMap;
+  public Set<String> vocs;
+  public String species;
 
-  public void loadFromCSV(File fin) throws IOException {
+  public void init(File fin) throws IOException {
     vocMap = new HashMap<>();
+    vocs = new HashSet<>();
+    species = "NMVOC";
+
     MappingIterator<Map<String, String>> it = CsvUtil.read(fin);
 
     while(it.hasNext()) {
@@ -32,11 +36,13 @@ public class VocFactor implements GridFactor {
         if (e.getKey().startsWith("__"))
           continue;
 
+        vocs.add(e.getKey());
         String key = es + "," + st + "," + e.getKey();
         vocMap.put(key, Float.parseFloat(e.getValue()));
       }
     }
   }
+
 
   public void apply(ESID esid, Grid g) {
     Float F = vocMap.get(esid.name + "," + esid.species);
@@ -44,5 +50,10 @@ public class VocFactor implements GridFactor {
       return;
 
     g.floatScale(F);
+  }
+
+
+  public boolean isVoc(String s) {
+    return vocs.contains(s);
   }
 }
