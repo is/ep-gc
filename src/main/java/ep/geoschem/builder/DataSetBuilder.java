@@ -50,30 +50,28 @@ public class DataSetBuilder {
     }
 
     for (String date : range) {
-    //  for (String es : conf.emissions) {
-        for (String sector : conf.sectors) {
-          for (String species : speciesList) {
-            ESID esid = new ESID(target.name, date, species, sector);
+      for (String sector : conf.sectors) {
+        for (String species : speciesList) {
+          ESID esid = new ESID(target.name, date, species, sector);
 
-            ST st = new ST(target.pathTemplate);
-            st.add("cf", conf);
-            st.add("ta", target);
-            st.add("es", esid);
-            String oPath = st.render();
+          ST st = new ST(target.pathTemplate);
+          st.add("cf", conf);
+          st.add("ta", target);
+          st.add("es", esid);
+          String oPath = st.render();
 
-            List<String> oPathTokens = Lists.newArrayList(splitter.split(oPath));
-            String ncPath = oPathTokens.get(0);
-            // String varName = oPathTokens.get(1);
-            List<ESID> cluster = gridClusters.get(ncPath);
+          List<String> oPathTokens = Lists.newArrayList(splitter.split(oPath));
+          String ncPath = oPathTokens.get(0);
+          // String varName = oPathTokens.get(1);
+          List<ESID> cluster = gridClusters.get(ncPath);
 
-            if (cluster == null) {
-              cluster = new LinkedList<>();
-              gridClusters.put(ncPath, cluster);
-            }
-            cluster.add(esid);
+          if (cluster == null) {
+            cluster = new LinkedList<>();
+            gridClusters.put(ncPath, cluster);
           }
+          cluster.add(esid);
         }
-      //}
+      }
     }
   }
 
@@ -83,7 +81,7 @@ public class DataSetBuilder {
     ArrayList<String> ncFiles = new ArrayList<>(gridClusters.keySet());
 
     GridSetBuilder gridSetBuilder = new GridSetBuilder(this);
-    for (String ncFile: ncFiles) {
+    for (String ncFile : ncFiles) {
       gridSetBuilder.build(ncFile);
     }
   }
