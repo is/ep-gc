@@ -2,20 +2,27 @@
   "esconf" : {
     "EDGAR" : {
       "type" : "fs",
-      "basePath" : "data/in",
+      "basePath" : "data/1",
       "timeScale" : "year",
       "name" : "EDGAR",
-      "pathTemplate" : "<cf.basePath>/<es.name>/<es.species>/v42_<es.species>_<es.date>_IPCC_<es.sector>.0.1x0.1.nc|||emi_<es.speciesLower>"
+      "pathTemplate" : "<cf.up.root>/<es.name>/<es.year>.nc|||<es.species>_<es.sector>"
     },
     "EMEP" : {
       "type" : "fs",
-      "basePath" : "data/in",
+      "basePath" : "data/1",
       "timeScale" : "year",
       "name" : "EMEP",
-      "pathTemplate" : "<cf.basePath>/<es.name>/EMEP_CO_SOx_NH3_NOx_NMVOC_<es.date>_0.5x0.5.nc|||<es.species>_<es.sector>"
+      "pathTemplate" : "<cf.up.root>/<es.name>/<es.year>.nc|||<es.species>_<es.sector>"
+    },
+    "MEIC" : {
+      "type" : "fs",
+      "basePath" : "data/1",
+      "timeScale" : "month",
+      "name" : "MEIC",
+      "pathTemplate" : "<cf.up.root>/<es.name>/<es.year>/<es.month>.nc|||<es.species>_<es.sector>"
     }
   },
 
-  "root": "data",
-  "conf": "conf/t2"
+  "root": "data/1",
+  "conf": "conf/t1"
 }
