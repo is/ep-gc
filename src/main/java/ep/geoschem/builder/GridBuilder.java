@@ -5,11 +5,12 @@ import ep.common.ESID;
 import ep.common.Grid;
 import ep.common.GridSet;
 import ep.common.Grids;
+import ep.common.Source;
 import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
 
 public class GridBuilder {
-  GCConfiguration conf;
+  GCConfiguration cf;
   Target target;
 
   GridSetBuilder parent;
@@ -19,7 +20,7 @@ public class GridBuilder {
     this.parent = parent;
     this.root = parent.getParent();
 
-    this.conf = root.getConf();
+    this.cf = root.getConf();
     this.target = root.getTarget();
   }
 
@@ -27,44 +28,50 @@ public class GridBuilder {
 
     Grid resG = Grids.empty(target.shape);
 
-    for (String es: conf.emissions) {
-      if (target.enabledSet != null && !target.enabledSet.contains(es)) {
+    for (String sn: cf.emissions) {
+      if (target.enabledSet != null && !target.enabledSet.contains(sn)) {
         continue;
       }
 
-      String[] ss = conf.getSourceSectors(esid.species, esid.sector, es);
+      String[] ss;
+      if (cf.vocFactor.isVoc(esid.species)) {
+        ss = cf.getSourceSectors(cf.vocFactor.species, esid.sector, sn);
+      } else {
+        ss = cf.getSourceSectors(esid.species, esid.sector, sn);
+      }
+
       if (ss == null)
         continue;
 
       System.out.format("build %s: %s, %s, %s - %s {%s}\n", varName,
-        esid.date, esid.species, esid.sector, es, Joiner.on(", ").join(ss));
+        esid.date, esid.species, esid.sector, sn, Joiner.on(", ").join(ss));
 
       String year = esid.getYear();
 
-      if (conf.getYearIndex(es, year).equals(year)) {
+      if (cf.getYearIndex(sn, year).equals(year)) {
         Grid eg = Grids.getCombinedGridding(target.shape,
-          conf.getEmissionSource(es), es, esid.date, esid.species, ss);
+          cf.getEmissionSource(sn), sn, esid.date, esid.species, ss);
         resG.floatPlus(eg);
         continue;
       }
 
-      String yearBase = conf.getYearIndex(es, year);
-      String des = conf.defaultEmission;
-      String[] dss = conf.getSourceSectors(esid.species, esid.sector, des);
+      String yearBase = cf.getYearIndex(sn, year);
+      String des = cf.defaultEmission;
+      String[] dss = cf.getSourceSectors(esid.species, esid.sector, des);
 
       Grid baseFactor = Grids.getCombinedGridding(target.shape,
-        conf.getEmissionSource(des), des, yearBase, esid.species, dss);
+        cf.getEmissionSource(des), des, yearBase, esid.species, dss);
 
       Grid targetFactor = Grids.getCombinedGridding(target.shape,
-        conf.getEmissionSource(des), des, year, esid.species, dss);
+        cf.getEmissionSource(des), des, year, esid.species, dss);
 
       Grid eg;
       if (esid.isYearly()) {
         eg = Grids.getCombinedGridding(target.shape,
-          conf.getEmissionSource(es), es, yearBase, esid.species, ss);
+          cf.getEmissionSource(sn), sn, yearBase, esid.species, ss);
       } else {
         eg = Grids.getCombinedGridding(target.shape,
-          conf.getEmissionSource(es), es, yearBase + esid.getMonth(), esid.species, ss);
+          cf.getEmissionSource(sn), sn, yearBase + esid.getMonth(), esid.species, ss);
       }
 
       eg.floatScale2(baseFactor, targetFactor);
