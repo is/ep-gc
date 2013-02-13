@@ -104,7 +104,7 @@ public class PolarCoordinatesRegrid {
 
         double cLonF = cellLonFactor[clat];
         double sLonF = sLonFactor[sLon];
-        double dLonF = sLonFactor[dLon];
+        double dLonF = dLonFactor[dLon];
 
         dArr[dBase + dLon] += sArr[sBase + sLon] *
           (cLatF * cLonF) / (sLatF * sLonF);
