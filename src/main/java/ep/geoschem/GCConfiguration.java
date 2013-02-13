@@ -154,7 +154,7 @@ public class GCConfiguration extends ep.common.Configuration{
 
   void initYearIndex() throws IOException {
     yearIndex = new HashMap<>();
-    MappingIterator<Map<String, String>> it = CsvUtil.read(getConfFile("year_source.csv"));
+    MappingIterator<Map<String, String>> it = CsvUtil.read(getConfFile("year.csv"));
 
     beginYear = 99999;
     endYear = 1;
@@ -228,7 +228,7 @@ public class GCConfiguration extends ep.common.Configuration{
 
   public void initCsvTimeFactor() throws IOException {
     ScalarMonthlyTimeFactor timeFactor = new ScalarMonthlyTimeFactor();
-    timeFactor.init(getConfFile("timefactor_monthly.csv"));
+    timeFactor.init(getConfFile("timefactor_month.csv"));
     this.csvTimeFactor = timeFactor;
   }
 
