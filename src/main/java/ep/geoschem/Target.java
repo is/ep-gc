@@ -17,7 +17,7 @@ public class Target {
   public String base;
   public String enabled[];
   public int[] shape;
-  public String dateStep;
+  public String timeScale;
   public String pathTemplate;
   public String beginDate, endDate;
 
@@ -27,9 +27,9 @@ public class Target {
   public void init() {
 
     if (beginDate.length() == 4) {
-      dateStep = "yearly";
+      timeScale = "year";
     } else {
-      dateStep = "monthly";
+      timeScale = "month";
     }
 
     if (enabled != null) {
