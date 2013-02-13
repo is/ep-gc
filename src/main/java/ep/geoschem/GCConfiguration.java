@@ -94,7 +94,7 @@ public class GCConfiguration extends ep.common.Configuration{
       esc.vocFactor = vocFactor;
 
       // simple scalar timefactor.
-      if (esc.timeFactorType == null)
+      if (Strings.isNullOrEmpty(esc.timeFactorType))
         esc.timeFactorType = "csv";
       if ("csv".equals(esc.timeFactorType))
         esc.timeFactor = csvTimeFactor;
@@ -115,7 +115,7 @@ public class GCConfiguration extends ep.common.Configuration{
     HashSet<String> sectors = new HashSet<>();
     sectorMapper = new HashMap<>();
 
-    MappingIterator<Map<String, String>> it = CsvUtil.read(getConfFile("sector_map.csv"));
+    MappingIterator<Map<String, String>> it = CsvUtil.read(getConfFile("sector.csv"));
     Splitter splitter = Splitter.on(',').trimResults();
 
     while (it.hasNext()) {
