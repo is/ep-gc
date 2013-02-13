@@ -64,7 +64,7 @@ public class BuilderSample {
     target.beginDate = "2003";
     target.endDate = "2004";
     target.base = "data/o0";
-    target.dateStep = "monthly";
+    target.timeScale = "month";
     target.shape = new int[] {180, 360};
     target.enabled = new String[] {"EDGAR", };
     target.pathTemplate = "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";

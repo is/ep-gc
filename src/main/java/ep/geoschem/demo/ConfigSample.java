@@ -48,7 +48,7 @@ public class ConfigSample {
     target.beginDate = "200301";
     target.endDate = "200412";
     target.base = "o0";
-    target.dateStep = "monthly";
+    target.timeScale = "month";
     target.shape = new int[] {900, 1800};
     target.enabled = new String[] {"EDGAR"};
     target.pathTemplate = "<ta.up.root>/<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
