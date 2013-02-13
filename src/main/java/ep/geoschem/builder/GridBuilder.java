@@ -26,6 +26,7 @@ public class GridBuilder {
   public void build(GridSet gs, String varName, ESID esid) throws Exception {
 
     Grid resG = Grids.empty(target.shape);
+
     for (String es: conf.emissions) {
       if (target.enabledSet != null && !target.enabledSet.contains(es)) {
         continue;
@@ -53,10 +54,18 @@ public class GridBuilder {
 
       Grid baseFactor = Grids.getCombinedGridding(target.shape,
         conf.getEmissionSource(des), des, yearBase, esid.species, dss);
+
       Grid targetFactor = Grids.getCombinedGridding(target.shape,
         conf.getEmissionSource(des), des, year, esid.species, dss);
-      Grid eg = Grids.getCombinedGridding(target.shape,
-        conf.getEmissionSource(es), es, year, esid.species, ss);
+
+      Grid eg;
+      if (esid.isYearly()) {
+        eg = Grids.getCombinedGridding(target.shape,
+          conf.getEmissionSource(es), es, yearBase, esid.species, ss);
+      } else {
+        eg = Grids.getCombinedGridding(target.shape,
+          conf.getEmissionSource(es), es, yearBase + esid.getMonth(), esid.species, ss);
+      }
 
       eg.floatScale2(baseFactor, targetFactor);
       resG.floatPlus(eg);
