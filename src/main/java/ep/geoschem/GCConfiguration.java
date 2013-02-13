@@ -298,12 +298,12 @@ public class GCConfiguration extends ep.common.Configuration{
     return yearIndex.get(emission + "," + year);
   }
 
-  public String[] getSourceSectors(String species, String sector, String emissionSource) {
+  public String[] getSourceSectors(String species, String sector, String source) {
     String key = species + "," + sector;
     SectorTable st = sectorMapper.get(key);
     if (st == null)
       return null;
-    return st.sectors.get(emissionSource);
+    return st.sectors.get(source);
   }
 
   public void loadTargetConfig() throws IOException {
