@@ -252,7 +252,41 @@ public class GCConfiguration extends ep.common.Configuration{
     initEmissionSources();
     initSectorMapper();
     initYearIndex();
+
+//    setupEmissionMask();
   }
+
+//  private void setupEmissionMask() throws IOException {
+//    File emPath = getConfFile("emission.csv");
+//    if (!emPath.isFile())
+//      return;
+//
+//    MappingIterator<Map<String, String>> it = CsvUtil.read(emPath);
+//    HashSet<String> es = Sets.newHashSet(emissions);
+//    boolean dirty = false;
+//
+//    while(it.hasNext()) {
+//      Map<String, String> row = it.next();
+//      String sn = row.get("SOURCE");
+//      String en = row.get("ENABLE");
+//
+//      if (Strings.isNullOrEmpty(sn))
+//        continue;
+//
+//      if (!es.contains(sn))
+//        return;
+//
+//      if (en.equals("0") || en.equals("false")) {
+//        es.remove(sn);
+//        dirty = true;
+//      }
+//    }
+//
+//    if (dirty) {
+//      emissions = new String[es.size()];
+//      es.toArray(emissions);
+//    }
+//  }
 
 
   public Source getEmissionSource(String emission) {
