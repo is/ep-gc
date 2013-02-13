@@ -61,4 +61,8 @@ public class ESID {
       return null;
     return date.substring(4, 6);
   }
+
+  public boolean isYearly() {
+    return (date.length() == 4);
+  }
 }
