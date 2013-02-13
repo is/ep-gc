@@ -1,6 +1,7 @@
 package ep.geoschem.builder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -79,6 +80,7 @@ public class DataSetBuilder {
   public void build() throws Exception {
     initGridCluster();
     ArrayList<String> ncFiles = new ArrayList<>(gridClusters.keySet());
+    Collections.sort(ncFiles);
 
     GridSetBuilder gridSetBuilder = new GridSetBuilder(this);
     for (String ncFile : ncFiles) {
