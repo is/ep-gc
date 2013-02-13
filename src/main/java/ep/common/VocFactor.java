@@ -31,6 +31,9 @@ public class VocFactor implements GridFactor {
         continue;
 
       for (Map.Entry<String, String> e: row.entrySet()) {
+        if (Strings.isNullOrEmpty(e.getKey()))
+          continue;
+
         if (e.getKey().equals("SOURCE") || e.getKey().equals("SECTOR"))
           continue;
         if (e.getKey().startsWith("__"))
