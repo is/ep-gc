@@ -1,5 +1,8 @@
 package ep.geoschem.builder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.common.base.Joiner;
 import ep.common.ESID;
 import ep.common.Grid;
@@ -25,7 +28,6 @@ public class GridBuilder {
   }
 
   public void build(GridSet gs, String varName, ESID esid) throws Exception {
-
     Grid resG = Grids.empty(target.shape);
 
     for (String sn: cf.emissions) {
@@ -77,7 +79,13 @@ public class GridBuilder {
       eg.floatScale2(baseFactor, targetFactor);
       resG.floatPlus(eg);
     }
-    // TODO more var's attribute.
-    gs.addGridding(varName, null, resG);
+
+    Map<String, String> attrs = new HashMap<>();
+
+    attrs.put("long_name", varName);
+    attrs.put("short_name", esid.name + "__" + varName);
+    attrs.put("unit", "mg yr-1");
+
+    gs.addGridding(varName, attrs, resG);
   }
 }

@@ -55,6 +55,7 @@ public class GridSet {
     Variable var = writer.addVariable(null, name, DataType.FLOAT, "lat lon");
     if (attr != null) {
       for (Map.Entry e: attr.entrySet()) {
+        // TODO handle number and other datatype attributes.
         var.addAttribute(new Attribute(e.getKey().toString(), e.getValue().toString()));
       }
     }
