@@ -33,10 +33,10 @@ public class GridSet {
     this.path = path;
     this.shape = shape;
 
-    dimensions = new HashMap<String, Dimension>();
-    variableDatas = new HashMap<String, Array>();
-    variableNames = new LinkedList<String>();
-    variables = new HashMap<String, Variable>();
+    dimensions = new HashMap<>();
+    variableDatas = new HashMap<>();
+    variableNames = new LinkedList<>();
+    variables = new HashMap<>();
   }
 
 
@@ -78,6 +78,7 @@ public class GridSet {
     latVar.addAttribute(new Attribute("long_name", "latitude"));
     latVar.addAttribute(new Attribute("units", "degrees_north"));
     latVar.addAttribute(new Attribute("comment", "center_of_cell"));
+    latVar.addAttribute(new Attribute("axis", "Y"));
 
 
     Variable lonVar = writer.addVariable(null, "lon", DataType.FLOAT, lonDim.getName());
@@ -85,6 +86,7 @@ public class GridSet {
     lonVar.addAttribute(new Attribute("long_name", "longitude"));
     lonVar.addAttribute(new Attribute("units", "degrees_east"));
     lonVar.addAttribute(new Attribute("comment", "center_of_cell"));
+    lonVar.addAttribute(new Attribute("axis", "X"));
 
     Array latArr = Array.factory(float.class, new int[] {resLat});
     float[] latArr2 = (float[])latArr.getStorage();
