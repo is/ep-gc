@@ -11,7 +11,21 @@ Requirements
 Installation
 ------------
 1. Check source code from github
-      git clone git@github.com:is/ep-gc.git
+   <pre>
+   git clone git@github.com:is/ep-gc.git
+   </pre>
 
 2. Build the source by maven
-      cd ep-gc; mvn package
+   <pre>
+   cd ep-gc; mvn package
+   </pre>
+
+3. Run Demo.
+
+   <pre>
+   # Generate test data set for input
+   mvn exec:java -Dexec.mainClass="ep.geoschem.demo.gen.GD1"
+
+   # Run offline preprocessor
+   mvn exec:java -Dexec.mainClass="ep.geoschem.demo.T1"
+   </pre>
