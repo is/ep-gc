@@ -69,4 +69,8 @@ public class FileSystemSource implements Source {
     }
     return g;
   }
+
+  public Grid getMaskArray() {
+    return maskArray;
+  }
 }
