@@ -23,6 +23,7 @@
     }
   },
 
+  "zorder": ["MEIC", "EMEP", "EDGAR"],
   "root": "data/2",
   "conf": "conf/t2"
 }
