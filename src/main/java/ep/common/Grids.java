@@ -80,6 +80,20 @@ public class Grids {
   }
 
 
+  public static void maskRegrid(Grid source, Grid dest) {
+    PolarCoordinatesRegrid regrid =
+      getRegrid(source.getShape(), dest.getShape());
+    regrid.maskRegrid(source, dest);
+  }
+
+
+  public static void maskRegrid(Grid source, Grid dest, float threshold) {
+    PolarCoordinatesRegrid regrid =
+      getRegrid(source.getShape(), dest.getShape());
+    regrid.maskRegrid(source, dest, threshold);
+  }
+
+
   public static void regrid(Grid source, Grid dest) {
     PolarCoordinatesRegrid regrid =
       getRegrid(source.getShape(), dest.getShape());
