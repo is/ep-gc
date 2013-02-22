@@ -17,6 +17,7 @@ public class SourceConfig {
   public String name;
   public String timeScale;
   public String factorArray;
+  public String maskArray;
 
   public Map<String, String> speciesAliases;
   public String timeFactorType;

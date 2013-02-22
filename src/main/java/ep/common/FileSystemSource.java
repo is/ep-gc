@@ -11,7 +11,8 @@ public class FileSystemSource implements Source {
   FileSystemSourceConfig cf;
   ST pathSTTemplate;
   Splitter pathSplitter;
-  Grid factoryArray;
+  Grid factorArray;
+  Grid maskArray;
 
 
   public FileSystemSource(FileSystemSourceConfig cf) throws IOException, InvalidRangeException {
@@ -23,7 +24,11 @@ public class FileSystemSource implements Source {
     this.pathSTTemplate.add("es", ST.EMPTY_ATTR);
 
     if (this.cf.factorArray != null) {
-      factoryArray = Grids.read(this.cf.factorArray);
+      factorArray = Grids.read(this.cf.factorArray);
+    }
+
+    if (this.cf.maskArray != null) {
+      maskArray = Grids.read(this.cf.factorArray);
     }
   }
 
@@ -51,8 +56,8 @@ public class FileSystemSource implements Source {
 
     String arrayPath = randerPath(esid);
     Grid g = Grids.read(arrayPath);
-    if (factoryArray != null) {
-      g.floatScale(factoryArray);
+    if (factorArray != null) {
+      g.floatScale(factorArray);
     }
 
     if (esid.date != null && esid.date.length() == 6 && cf.timeFactor != null) {
