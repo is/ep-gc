@@ -81,6 +81,28 @@ public class PolarCoordinatesRegrid {
     }
   }
 
+
+  public void maskRegrid(Grid source, Grid dest) {
+    maskRegrid(source, dest, 0.99f);
+  }
+
+
+  public void maskRegrid(Grid source, Grid dest, float threshold) {
+    intensityRegrid(source, dest);
+
+    float dArr[] = (float[])dest.getSurface().getStorage();
+    int size = dArr.length;
+
+    for (int i = 0; i < size; ++i) {
+      if (dArr[i] < threshold) {
+        dArr[i] = 0;
+      } else {
+        dArr[i] = 1;
+      }
+    }
+  }
+
+
   public void extensityRegrid(Grid source, Grid dest) {
     float[] sArr = (float[])source.getSurface().getStorage();
     float[] dArr = (float[])dest.getSurface().getStorage();
