@@ -16,7 +16,10 @@ import ep.common.Grids;
 import ep.common.Source;
 import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
+
 
 public class DataSetBuilder {
   GCConfiguration conf;
@@ -25,6 +28,7 @@ public class DataSetBuilder {
   Map<String, List<ESID>> gridClusters;
   Map<String, Grid> maskArrays;
 
+  static final Logger logger = LoggerFactory.getLogger(DataSetBuilder.class);
 
   public GCConfiguration getConf() {
     return conf;
@@ -89,7 +93,10 @@ public class DataSetBuilder {
           }
         }
       }
-
+      logger.info(
+        String.format("%s mask: %d/%d cells, %.2f%%/%.2f%% used, %.2f%%/%.2f%% clipped",
+        sname, cSet, cSet + cClip, ((float)cSet) / (cSet + cClip) * 100, ((float)cSet) / bakeArr.length * 100,
+        ((float)cClip) / (cSet + cClip) * 100, ((float)cClip) / bakeArr.length * 100));
     }
   }
 

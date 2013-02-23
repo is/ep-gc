@@ -1,5 +1,6 @@
 package ep.geoschem.builder;
 
+import javax.sound.midi.SysexMessage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,9 +14,13 @@ import ep.common.ESID;
 import ep.common.GridSet;
 import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 
 public class GridSetBuilder {
+  static final Logger logger = LoggerFactory.getLogger(DataSetBuilder.class);
+
   DataSetBuilder parent;
 
   GCConfiguration conf;
@@ -38,6 +43,7 @@ public class GridSetBuilder {
     List<ESID> cluster = parent.getGridCluster(ncFilename);
     Splitter splitter = Splitter.on("|||");
 
+    logger.info("Generate:" + ncFilename);
     File file = new File(ncFilename);
     file.getParentFile().mkdirs();
 
