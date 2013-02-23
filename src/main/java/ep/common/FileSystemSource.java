@@ -23,14 +23,25 @@ public class FileSystemSource implements Source {
     this.pathSTTemplate.add("cf", cf);
     this.pathSTTemplate.add("es", ST.EMPTY_ATTR);
 
+    ESID esid = new ESID(cf.name, null, null, null);
+
     if (this.cf.factorArray != null) {
-      factorArray = Grids.read(this.cf.factorArray);
+      factorArray = Grids.read(randerPath(this.cf.factorArray, esid));
     }
 
     if (this.cf.maskArray != null) {
-      maskArray = Grids.read(this.cf.factorArray);
+      maskArray = Grids.read(randerPath(this.cf.maskArray, esid));
     }
   }
+
+
+  public String randerPath(String template, ESID esid) {
+    ST pathST = new ST(template);
+    pathST.add("cf", cf);
+    pathST.add("es", esid);
+    return pathST.render();
+  }
+
 
   public String randerPath(ESID esid) {
     ST pathST = new ST(pathSTTemplate);
