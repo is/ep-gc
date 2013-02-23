@@ -35,6 +35,8 @@ public class GridBuilder {
         continue;
       }
 
+      Grid maskArray = root.getMaskArray(sn);
+
       String[] ss;
       if (cf.vocFactor.isVoc(esid.species)) {
         ss = cf.getSourceSectors(cf.vocFactor.species, esid.sector, sn);
@@ -77,7 +79,12 @@ public class GridBuilder {
       }
 
       eg.floatScale2(baseFactor, targetFactor);
-      resG.floatPlus(eg);
+
+      if (maskArray != null) {
+        resG.floatPlusWithFactor(eg, maskArray);
+      } else {
+        resG.floatPlus(eg);
+      }
     }
 
     Map<String, String> attrs = new HashMap<>();

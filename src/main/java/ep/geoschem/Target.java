@@ -24,6 +24,7 @@ public class Target {
   @JsonIgnore public Set<String> enabledSet;
   @JsonIgnore public GCConfiguration up;
 
+
   public void init() {
 
     if (beginDate.length() == 4) {

@@ -47,6 +47,11 @@ public class DataSetBuilder {
   }
 
 
+  public Grid getMaskArray(String sn) {
+    return maskArrays.get(sn);
+  }
+
+
   public void initMaskArrays() {
     maskArrays = new HashMap<>();
     Grid bake = Grids.empty(target.shape);
@@ -62,7 +67,7 @@ public class DataSetBuilder {
       Grid originMask = s.getMaskArray();
       if (originMask == null)
         continue;
-      
+
       Grid realMask = Grids.empty(target.shape);
       Grids.maskRegrid(originMask, realMask);
       maskArrays.put(sname, realMask);
@@ -84,6 +89,7 @@ public class DataSetBuilder {
           }
         }
       }
+
     }
   }
 
@@ -137,4 +143,6 @@ public class DataSetBuilder {
       gridSetBuilder.build(ncFile);
     }
   }
+
+
 }

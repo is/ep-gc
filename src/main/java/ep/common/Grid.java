@@ -85,6 +85,20 @@ public class Grid {
   }
 
 
+  public void floatPlusWithFactor(Grid g, Grid factor) {
+    if (g.getSize() != getSize()) {
+      throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
+    }
+
+    float[] addend = (float[])g.getSurface().getStorage();
+    float[] augend = (float[])g.getSurface().getStorage();
+    float[] f = (float[])g.getSurface().getStorage();
+    int size = addend.length;
+    for (int i = 0; i < size; ++i) {
+      augend[i] += addend[i] * f[i];
+    }
+  }
+
   public void floatPlus(Grid g) {
     if (g.getSize() != getSize()) {
       throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
