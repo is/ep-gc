@@ -20,6 +20,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import ep.common.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ucar.ma2.InvalidRangeException;
 
 
@@ -28,6 +30,8 @@ import ucar.ma2.InvalidRangeException;
   "esconf", "beginYear", "endYear", "yearmap"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GCConfiguration extends ep.common.Configuration{
+  static final Logger logger = LoggerFactory.getLogger(GCConfiguration.class);
+
   public String defaultEmission;
   public GridFactor csvTimeFactor;
   public VocFactor vocFactor;
@@ -315,6 +319,13 @@ public class GCConfiguration extends ep.common.Configuration{
     for (Target t: targets) {
       t.init();
       t.up = this;
+    }
+  }
+
+
+  public void check() {
+    if (defaultEmission == null) {
+      logger.warn("Default Emission is null");
     }
   }
 }

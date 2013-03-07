@@ -26,6 +26,7 @@ public class Main {
   public void init(File cfFile) throws IOException, InvalidRangeException {
     cf = GCConfiguration.load(cfFile);
     cf.init();
+    cf.check();
 
     if (cf.targets == null)
       cf.loadTargetConfig();

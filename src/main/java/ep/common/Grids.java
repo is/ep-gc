@@ -106,10 +106,11 @@ public class Grids {
     Source es, String name, String date,
     String species, String sectors[]) throws Exception {
 
-    Grid res = empty(outShape);
+    if (sectors == null || sectors.length == 0) {
+      throw new IllegalArgumentException("Sectors is empty or null, es:" + es + ", name:" + name + ", date:" + date + ", species:" + species);
+    }
 
-    if (sectors == null || sectors.length == 0)
-      return res;
+    Grid res = empty(outShape);
 
     ESID esid = new ESID(name, date, species, null);
     for (String sector: sectors) {
