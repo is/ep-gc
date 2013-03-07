@@ -90,9 +90,10 @@ public class Grid {
       throw new IllegalArgumentException("not equal gridding added: " + getSize() + " + " + g.getSize());
     }
 
+    float[] augend = (float[])surface.getStorage();
     float[] addend = (float[])g.getSurface().getStorage();
-    float[] augend = (float[])g.getSurface().getStorage();
-    float[] f = (float[])g.getSurface().getStorage();
+    float[] f = (float[])factor.getSurface().getStorage();
+
     int size = addend.length;
     for (int i = 0; i < size; ++i) {
       augend[i] += addend[i] * f[i];
