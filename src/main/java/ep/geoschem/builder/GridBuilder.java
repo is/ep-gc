@@ -34,17 +34,12 @@ public class GridBuilder {
       }
 
       Grid maskArray = root.getMaskArray(sn);
+      String[] ss = cf.getSourceSectors(esid.species, esid.sector, sn);
 
-      String[] ss;
-      if (cf.vocFactor.isVoc(esid.species)) {
-        ss = cf.getSourceSectors(cf.vocFactor.species, esid.sector, sn);
-      } else {
-        ss = cf.getSourceSectors(esid.species, esid.sector, sn);
+      if (ss == null) {
+        throw new IllegalArgumentException("null/empty source sector set, " +
+          "name="+ sn + ",species=" + esid.species + ",sector=" + esid.sector);
       }
-
-      if (ss == null)
-        continue;
-
       //System.out.format("build %s: %s, %s, %s - %s {%s}\n", varName,
       //  esid.date, esid.species, esid.sector, sn, Joiner.on(", ").join(ss));
 

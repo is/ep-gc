@@ -305,6 +305,10 @@ public class GCConfiguration extends ep.common.Configuration{
   }
 
   public String[] getSourceSectors(String species, String sector, String source) {
+    if (vocFactor.isVoc(species)) {
+      species = vocFactor.species;
+    }
+
     String key = species + "," + sector;
     SectorTable st = sectorMapper.get(key);
     if (st == null)
