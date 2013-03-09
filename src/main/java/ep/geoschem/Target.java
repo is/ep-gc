@@ -16,6 +16,7 @@ public class Target {
   public String name;
   public String base;
   public String enabled[];
+  public String species[];
   public int[] shape;
   public String timeScale;
   public String pathTemplate;

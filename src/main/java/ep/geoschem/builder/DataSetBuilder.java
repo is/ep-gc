@@ -63,10 +63,10 @@ public class DataSetBuilder {
     if (conf.zorder == null)
       return;
 
-    float bakeArr[] = (float[])bake.getSurface().getStorage();
+    float bakeArr[] = (float[]) bake.getSurface().getStorage();
     int size = bakeArr.length;
 
-    for (String sname: conf.zorder) {
+    for (String sname : conf.zorder) {
       Source s = conf.getEmissionSource(sname);
       Grid originMask = s.getMaskArray();
       if (originMask == null)
@@ -79,7 +79,7 @@ public class DataSetBuilder {
       int cClip = 0; // cliped
       int cSet = 0; // setup.
 
-      float maskArr[] = (float[])realMask.getSurface().getStorage();
+      float maskArr[] = (float[]) realMask.getSurface().getStorage();
       for (int i = 0; i < size; ++i) {
         if (bakeArr[i] >= 1) {
           if (maskArr[i] != 0) {
@@ -95,11 +95,10 @@ public class DataSetBuilder {
       }
       logger.info(
         String.format("%s mask: %d/%d cells, %.2f%%/%.2f%% used, %.2f%%/%.2f%% clipped",
-        sname, cSet, cSet + cClip, ((float)cSet) / (cSet + cClip) * 100, ((float)cSet) / bakeArr.length * 100,
-        ((float)cClip) / (cSet + cClip) * 100, ((float)cClip) / bakeArr.length * 100));
+          sname, cSet, cSet + cClip, ((float) cSet) / (cSet + cClip) * 100, ((float) cSet) / bakeArr.length * 100,
+          ((float) cClip) / (cSet + cClip) * 100, ((float) cClip) / bakeArr.length * 100));
     }
   }
-
 
 
   public void initGridCluster() {
@@ -107,9 +106,16 @@ public class DataSetBuilder {
     DateRange range = new DateRange(target.beginDate, target.endDate);
     Splitter splitter = Splitter.on("|||");
 
-    List<String> speciesList = Lists.newArrayList(conf.species);
-    if (conf.vocSpecies != null) {
-      speciesList.addAll(Lists.newArrayList(conf.vocSpecies));
+    List<String> speciesList;
+
+    if (target.species != null) {
+      speciesList = Lists.newArrayList(target.species);
+    } else {
+      speciesList = Lists.newArrayList(conf.species);
+
+      if (conf.vocSpecies != null) {
+        speciesList.addAll(Lists.newArrayList(conf.vocSpecies));
+      }
     }
 
     for (String date : range) {
