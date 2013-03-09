@@ -9,8 +9,12 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VocFactor implements GridFactor {
+  static final Logger logger = LoggerFactory.getLogger(VocFactor.class);
+
   public Map<String, Float> vocMap;
   public Set<String> vocs;
   public String species;
@@ -48,10 +52,13 @@ public class VocFactor implements GridFactor {
 
 
   public void apply(ESID esid, Grid g) {
-    Float F = vocMap.get(esid.name + "," + esid.species);
-    if (F == null)
+    Float F = vocMap.get(esid.name + "," + esid.sector + "," + esid.species);
+    if (F == null) {
+      logger.warn("VOC factor is not found, " +
+        "name:" + esid.name + ", sector:" + esid.sector +
+        ", species:" + esid.species);
       return;
-
+    }
     g.floatScale(F);
   }
 
