@@ -71,7 +71,7 @@ public class PolarCoordinatesRegrid {
         int sLon = lonCSR.sRef[clon];
         int dLon = lonCSR.dRef[clon];
 
-        double cLonF = cellLonFactor[clat];
+        double cLonF = cellLonFactor[clon];
         double sLonF = sLonFactor[sLon];
         double dLonF = dLonFactor[dLon];
 
@@ -116,15 +116,16 @@ public class PolarCoordinatesRegrid {
       int sBase = sLat * si.lonRes;
       int dBase = dLat * di.lonRes;
 
+      double cLatF = cellLatFactor[clat];
       double sLatF = sLatFactor[sLat];
       double dLatF = dLatFactor[dLat];
-      double cLatF = cellLatFactor[clat];
+
 
       for (clon = 0; clon < lonCSR.P; ++clon) {
         int sLon = lonCSR.sRef[clon];
         int dLon = lonCSR.dRef[clon];
 
-        double cLonF = cellLonFactor[clat];
+        double cLonF = cellLonFactor[clon];
         double sLonF = sLonFactor[sLon];
         double dLonF = dLonFactor[dLon];
 
@@ -286,10 +287,6 @@ public class PolarCoordinatesRegrid {
     }
 
     while (sP < sRes || dP < dRes) {
-//      System.out.println(
-//        "border=" + border + ", base=" + base + ", sbase=" +
-//          sBase + ", dbase=" + dBase + ", P=(" + P + "," + sP + "," + dP + ")");
-
       if (border == TAG_SRC) {
         nextBase = sDiff * (sP + 1);
 
