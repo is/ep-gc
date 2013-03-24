@@ -85,6 +85,10 @@ public class GridBuilder {
     attrs.put("short_name", esid.name + "__" + varName);
     attrs.put("unit", "mg yr-1");
 
-    gs.addGridding(varName, attrs, resG);
+    if (target.clip != null) {
+      gs.addArray(varName, attrs,  resG.arrayClip(target.clip));
+    } else {
+      gs.addGridding(varName, attrs, resG);
+    }
   }
 }

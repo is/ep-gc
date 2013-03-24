@@ -16,10 +16,11 @@ import ucar.nc2.Variable;
 
 public class GridSet {
   public static final String CONTACT = "qiangzhang@tsinghua.edu.cn";
-  public static final String CONVENTIONS = "CF-1.0";
+  public static final String CONVENTIONS = "CF-1.6";
 
   String path;
   int shape[];
+  Rect clip;
 
   NetcdfFileWriter writer;
 
@@ -29,14 +30,20 @@ public class GridSet {
   List<String> variableNames;
 
 
-  public GridSet(String path, int shape[]) {
+  public GridSet(String path, int shape[], Rect clip) {
     this.path = path;
     this.shape = shape;
+    this.clip = clip;
 
     dimensions = new HashMap<>();
     variableDatas = new HashMap<>();
     variableNames = new LinkedList<>();
     variables = new HashMap<>();
+  }
+
+
+  public GridSet(String path, int shape[]) {
+    this(path, shape, null);
   }
 
 
@@ -52,6 +59,11 @@ public class GridSet {
 
 
   public void addGridding(String name, Map<String, String> attr, Grid g) {
+    addArray(name, attr, g.getSurface());
+  }
+
+
+  public void addArray(String name, Map<String, String> attr, Array g) {
     Variable var = writer.addVariable(null, name, DataType.FLOAT, "lat lon");
     if (attr != null) {
       for (Map.Entry e: attr.entrySet()) {
@@ -59,15 +71,25 @@ public class GridSet {
         var.addAttribute(new Attribute(e.getKey().toString(), e.getValue().toString()));
       }
     }
-    addVariable(var, g.getSurface());
+    addVariable(var, g);
   }
 
 
   void addDimessions() {
-    int resLat = shape[0];
-    int resLon = shape[1];
+
+    int resLat;
+    int resLon;
+
+    if (clip == null) {
+      resLat = shape[0];
+      resLon = shape[1];
+    } else {
+      resLat = clip.height;
+      resLon = clip.width;
+    }
 
     // add dimensions
+
     Dimension latDim = writer.addDimension(null, "lat", resLat);
     Dimension lonDim = writer.addDimension(null, "lon", resLon);
 
@@ -89,10 +111,20 @@ public class GridSet {
     lonVar.addAttribute(new Attribute("comment", "center_of_cell"));
     lonVar.addAttribute(new Attribute("axis", "X"));
 
+    float cellLon = 360f / resLon;
+    float cellLat = 180f / resLat;
+
+    float baseLon = 0f +  cellLon / 2;
+    float baseLat = -90f +  cellLat / 2;
+
+    if (clip != null) {
+      baseLat += cellLat * clip.bottom;
+      baseLon += cellLon * clip.left;
+    }
+
     Array latArr = Array.factory(float.class, new int[] {resLat});
     float[] latArr2 = (float[])latArr.getStorage();
-    float cellLat = 180f / resLat;
-    float baseLat = -90f +  cellLat / 2;
+
     for (int i = 0; i < resLat; ++i) {
       latArr2[i] = baseLat;
       baseLat += cellLat;
@@ -101,8 +133,7 @@ public class GridSet {
 
     Array lonArr = Array.factory(float.class, new int[] {resLon});
     float[] lonArr2 = (float[])lonArr.getStorage();
-    float cellLon = 360f / resLon;
-    float baseLon = 0f +  cellLon / 2;
+
     for (int i = 0; i < resLon; ++i) {
       lonArr2[i] = baseLon;
       baseLon += cellLon;

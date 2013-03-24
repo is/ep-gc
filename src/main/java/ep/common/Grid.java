@@ -2,6 +2,7 @@ package ep.common;
 
 import ucar.ma2.Array;
 import ucar.ma2.Index;
+import ucar.ma2.InvalidRangeException;
 
 public class Grid {
   public Array surface;
@@ -43,6 +44,12 @@ public class Grid {
     resLon = 360.0f / shape[1];
   }
 
+  public Array arrayClip(Rect rect) throws InvalidRangeException {
+    return surface.section(
+      new int[] {rect.bottom, rect.left},
+      new int[] {rect.height, rect.width}
+    );
+  }
 
   private Grid cloneWithProperties() {
     Grid ng = new Grid();
@@ -62,6 +69,7 @@ public class Grid {
     ng.surface = Array.factory(surface.getElementType(), surface.getShape());
     return ng;
   }
+
 
   public Grid copy() {
     Grid ng = cloneWithProperties();

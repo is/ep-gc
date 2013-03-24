@@ -47,7 +47,7 @@ public class GridSetBuilder {
     File file = new File(ncFilename);
     file.getParentFile().mkdirs();
 
-    gs = new GridSet(ncFilename, target.shape);
+    gs = new GridSet(ncFilename, target.shape, target.clip);
     gs.open();
 
     Map<String, ESID> subTasks = new HashMap<>();
