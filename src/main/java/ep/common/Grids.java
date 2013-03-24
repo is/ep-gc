@@ -16,7 +16,7 @@ public class Grids {
   Map<String, PolarCoordinatesRegrid> regrids;
 
   protected Grids() {
-    regrids = new HashMap<String, PolarCoordinatesRegrid>();
+    regrids = new HashMap();
   }
 
   public static Grids grids = new Grids();
@@ -81,9 +81,7 @@ public class Grids {
 
 
   public static void maskRegrid(Grid source, Grid dest) {
-    PolarCoordinatesRegrid regrid =
-      getRegrid(source.getShape(), dest.getShape());
-    regrid.maskRegrid(source, dest);
+    maskRegrid(source, dest, 0.99f);
   }
 
 

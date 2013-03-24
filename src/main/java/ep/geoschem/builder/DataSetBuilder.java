@@ -131,7 +131,7 @@ public class DataSetBuilder {
 
           List<String> oPathTokens = Lists.newArrayList(splitter.split(oPath));
           String ncPath = oPathTokens.get(0);
-          // String varName = oPathTokens.get(1);
+
           List<ESID> cluster = gridClusters.get(ncPath);
 
           if (cluster == null) {
