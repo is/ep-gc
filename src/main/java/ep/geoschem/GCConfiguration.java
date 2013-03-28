@@ -59,7 +59,7 @@ public class GCConfiguration extends ep.common.Configuration{
   @JsonProperty("esconf")
   public Map<String, SourceConfig> emissionConfigs;
 
-  public List<String> zorder;
+  public String[] zorder;
 
   public static class SectorTable {
     public Map<String, String[]> sectors;

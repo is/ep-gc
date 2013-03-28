@@ -66,7 +66,7 @@ public class BuilderSample {
     target.base = "data/o0";
     target.timeScale = "month";
     target.shape = new int[] {180, 360};
-    target.enabled = new String[] {"EDGAR", };
+    target.zorder = new String[] {"EDGAR", };
     target.pathTemplate = "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
     target.init();
 

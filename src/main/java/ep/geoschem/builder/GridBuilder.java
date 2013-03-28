@@ -40,8 +40,6 @@ public class GridBuilder {
         throw new IllegalArgumentException("null/empty source sector set, " +
           "name="+ sn + ",species=" + esid.species + ",sector=" + esid.sector);
       }
-      //System.out.format("build %s: %s, %s, %s - %s {%s}\n", varName,
-      //  esid.date, esid.species, esid.sector, sn, Joiner.on(", ").join(ss));
 
       String year = esid.getYear();
 
@@ -52,7 +50,11 @@ public class GridBuilder {
           cf.getEmissionSource(sn), sn, esid.date, esid.species, ss);
       } else {
         String yearBase = cf.getYearIndex(sn, year);
-        String des = cf.defaultEmission;
+
+        String des = target.defaultEmission;
+        if (des == null)
+          des = cf.defaultEmission;
+
         String[] dss = cf.getSourceSectors(esid.species, esid.sector, des);
 
         Grid baseFactor = Grids.getCombinedGridding(target.shape,

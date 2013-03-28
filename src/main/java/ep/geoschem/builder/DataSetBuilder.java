@@ -58,15 +58,22 @@ public class DataSetBuilder {
 
   public void initMaskArrays() {
     maskArrays = new HashMap<>();
-    Grid bake = Grids.empty(target.shape);
+    String zorder[] = null;
 
-    if (conf.zorder == null)
+    if (conf.zorder != null)
+      zorder = conf.zorder;
+    if (target.zorder != null)
+      zorder = target.zorder;
+
+    if (zorder == null)
       return;
+
+    Grid bake = Grids.empty(target.shape);
 
     float bakeArr[] = (float[]) bake.getSurface().getStorage();
     int size = bakeArr.length;
 
-    for (String sname : conf.zorder) {
+    for (String sname : zorder) {
       Source s = conf.getEmissionSource(sname);
       Grid originMask = s.getMaskArray();
       if (originMask == null)
@@ -94,11 +101,13 @@ public class DataSetBuilder {
         }
       }
       logger.info(
-        String.format("%s mask: %d/%d cells, %.2f%%/%.2f%% used, %.2f%%/%.2f%% clipped",
-          sname, cSet, cSet + cClip, ((float) cSet) / (cSet + cClip) * 100, ((float) cSet) / bakeArr.length * 100,
+        String.format("%s -- %s mask: %d/%d cells, %.2f%%/%.2f%% used, %.2f%%/%.2f%% clipped",
+          target.name, sname,
+          cSet, cSet + cClip, ((float) cSet) / (cSet + cClip) * 100, ((float) cSet) / bakeArr.length * 100,
           ((float) cClip) / (cSet + cClip) * 100, ((float) cClip) / bakeArr.length * 100));
     }
   }
+
 
 
   public void initGridCluster() {

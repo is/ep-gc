@@ -50,7 +50,7 @@ public class ConfigSample {
     target.base = "o0";
     target.timeScale = "month";
     target.shape = new int[] {900, 1800};
-    target.enabled = new String[] {"EDGAR"};
+    target.zorder = new String[] {"EDGAR"};
     target.pathTemplate = "<ta.up.root>/<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
     target.init();
 

@@ -16,8 +16,9 @@ import ep.common.Rect;
 public class Target {
   public String name;
   public String base;
-  public String enabled[];
+  public String zorder[];
   public String species[];
+  public String defaultEmission;
   public int[] shape;
   public String timeScale;
   public String pathTemplate;
@@ -36,8 +37,8 @@ public class Target {
       timeScale = "month";
     }
 
-    if (enabled != null) {
-      enabledSet = new HashSet<>(Arrays.asList(enabled));
+    if (zorder != null) {
+      enabledSet = new HashSet<>(Arrays.asList(zorder));
     }
   }
 }
