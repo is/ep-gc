@@ -42,11 +42,12 @@ public class DataSetBuilder {
   public DataSetBuilder(GCConfiguration conf) {
     this.conf = conf;
     this.targets = conf.targets;
-    this.helpers = new ArrayList(this.targets.size());
 
   }
 
   void initTargetHelpers() {
+    this.helpers = new ArrayList(this.targets.size());
+
     for (Target target: this.targets) {
       TargetHelper helper = new TargetHelper(conf, target);
       helper.initMaskArrays();
