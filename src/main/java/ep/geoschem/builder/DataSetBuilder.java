@@ -43,7 +43,13 @@ public class DataSetBuilder {
     this.conf = conf;
     this.targets = conf.targets;
     this.helpers = new ArrayList(this.targets.size());
+
+  }
+
+  void initTargetHelpers() {
     for (Target target: this.targets) {
+      TargetHelper helper = new TargetHelper(conf, target);
+      helper.initMaskArrays();
       helpers.add(new TargetHelper(conf, target));
     }
   }
@@ -100,6 +106,7 @@ public class DataSetBuilder {
 
 
   public void build() throws Exception {
+    initTargetHelpers();
     initGridCluster();
     ArrayList<String> ncFiles = new ArrayList<>(gridClusters.keySet());
     Collections.sort(ncFiles);

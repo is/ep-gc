@@ -70,7 +70,7 @@ public class BuilderSample {
     target.pathTemplate = "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>";
     target.init();
 
-    DataSetBuilder builder = new DataSetBuilder(c2, target);
+    DataSetBuilder builder = new DataSetBuilder(c2);
     builder.initGridCluster();
     builder.build();
   }

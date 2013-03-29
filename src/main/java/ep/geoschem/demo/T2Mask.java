@@ -6,6 +6,7 @@ import ep.geoschem.GCConfiguration;
 import ep.geoschem.Main;
 import ep.geoschem.Target;
 import ep.geoschem.builder.DataSetBuilder;
+import ep.geoschem.builder.TargetHelper;
 
 public class T2Mask {
   public static void main(String argv[]) throws Exception {
@@ -16,8 +17,8 @@ public class T2Mask {
       cf.loadTargetConfig();
 
     for (Target target: cf.targets) {
-      DataSetBuilder builder = new DataSetBuilder(cf, target);
-      builder.initMaskArrays();
+      TargetHelper helper = new TargetHelper(cf, target);
+      helper.initMaskArrays();
     }
   }
 }
