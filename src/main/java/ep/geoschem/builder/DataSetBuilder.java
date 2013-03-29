@@ -12,8 +12,6 @@ import com.google.common.collect.Lists;
 import ep.common.DateRange;
 import ep.common.ESID;
 import ep.common.Grid;
-import ep.common.Grids;
-import ep.common.Source;
 import ep.geoschem.GCConfiguration;
 import ep.geoschem.Target;
 import org.slf4j.Logger;
@@ -23,9 +21,10 @@ import org.stringtemplate.v4.ST;
 
 public class DataSetBuilder {
   GCConfiguration conf;
-  Target target;
+  List<Target> targets;
+  List<TargetHelper> helpers;
 
-  Map<String, List<ESID>> gridClusters;
+  Map<String, List<SubTarget>> gridClusters;
   Map<String, Grid> maskArrays;
 
   static final Logger logger = LoggerFactory.getLogger(DataSetBuilder.class);
@@ -35,127 +34,72 @@ public class DataSetBuilder {
   }
 
 
-  public Target getTarget() {
-    return target;
-  }
-
-
-  public List<ESID> getGridCluster(String fn) {
+  public List<SubTarget> getGridCluster(String fn) {
     return gridClusters.get(fn);
   }
 
 
-  public DataSetBuilder(GCConfiguration conf, Target target) {
+  public DataSetBuilder(GCConfiguration conf) {
     this.conf = conf;
-    this.target = target;
-  }
-
-
-  public Grid getMaskArray(String sn) {
-    return maskArrays.get(sn);
-  }
-
-
-  public void initMaskArrays() {
-    maskArrays = new HashMap<>();
-    String zorder[] = null;
-
-    if (conf.zorder != null)
-      zorder = conf.zorder;
-    if (target.zorder != null)
-      zorder = target.zorder;
-
-    if (zorder == null)
-      return;
-
-    Grid bake = Grids.empty(target.shape);
-
-    float bakeArr[] = (float[]) bake.getSurface().getStorage();
-    int size = bakeArr.length;
-
-    for (String sname : zorder) {
-      Source s = conf.getEmissionSource(sname);
-      Grid originMask = s.getMaskArray();
-      if (originMask == null)
-        continue;
-
-      Grid realMask = Grids.empty(target.shape);
-      Grids.maskRegrid(originMask, realMask);
-      maskArrays.put(sname, realMask);
-
-      int cClip = 0; // cliped
-      int cSet = 0; // setup.
-
-      float maskArr[] = (float[]) realMask.getSurface().getStorage();
-      for (int i = 0; i < size; ++i) {
-        if (bakeArr[i] >= 1) {
-          if (maskArr[i] != 0) {
-            maskArr[i] = 0;
-            ++cClip;
-          }
-        } else {
-          if (maskArr[i] == 1) {
-            bakeArr[i] = 1;
-            ++cSet;
-          }
-        }
-      }
-      logger.info(
-        String.format("%s -- %s mask: %d/%d cells, %.2f%%/%.2f%% used, %.2f%%/%.2f%% clipped",
-          target.name, sname,
-          cSet, cSet + cClip, ((float) cSet) / (cSet + cClip) * 100, ((float) cSet) / bakeArr.length * 100,
-          ((float) cClip) / (cSet + cClip) * 100, ((float) cClip) / bakeArr.length * 100));
+    this.targets = conf.targets;
+    this.helpers = new ArrayList(this.targets.size());
+    for (Target target: this.targets) {
+      helpers.add(new TargetHelper(conf, target));
     }
   }
-
 
 
   public void initGridCluster() {
     gridClusters = new HashMap<>();
-    DateRange range = new DateRange(target.beginDate, target.endDate);
-    Splitter splitter = Splitter.on("|||");
 
-    List<String> speciesList;
+    for (TargetHelper helper : helpers) {
+      Target target = helper.getTarget();
 
-    if (target.species != null) {
-      speciesList = Lists.newArrayList(target.species);
-    } else {
-      speciesList = Lists.newArrayList(conf.species);
+      DateRange range = new DateRange(target.beginDate, target.endDate);
+      Splitter splitter = Splitter.on("|||");
 
-      if (conf.vocSpecies != null) {
-        speciesList.addAll(Lists.newArrayList(conf.vocSpecies));
+      List<String> speciesList;
+
+      if (target.species != null) {
+        speciesList = Lists.newArrayList(target.species);
+      } else {
+        speciesList = Lists.newArrayList(conf.species);
+
+        if (conf.vocSpecies != null) {
+          speciesList.addAll(Lists.newArrayList(conf.vocSpecies));
+        }
       }
-    }
 
-    for (String date : range) {
-      for (String sector : conf.sectors) {
-        for (String species : speciesList) {
-          ESID esid = new ESID(target.name, date, species, sector);
+      for (String date : range) {
+        for (String sector : conf.sectors) {
+          for (String species : speciesList) {
+            ESID esid = new ESID(target.name, date, species, sector);
 
-          ST st = new ST(target.pathTemplate);
-          st.add("cf", conf);
-          st.add("ta", target);
-          st.add("es", esid);
-          String oPath = st.render();
+            ST st = new ST(target.pathTemplate);
+            st.add("cf", conf);
+            st.add("ta", target);
+            st.add("es", esid);
+            String oPath = st.render();
 
-          List<String> oPathTokens = Lists.newArrayList(splitter.split(oPath));
-          String ncPath = oPathTokens.get(0);
+            List<String> oPathTokens = Lists.newArrayList(splitter.split(oPath));
+            String ncPath = oPathTokens.get(0);
 
-          List<ESID> cluster = gridClusters.get(ncPath);
+            List<SubTarget> cluster = gridClusters.get(ncPath);
 
-          if (cluster == null) {
-            cluster = new LinkedList<>();
-            gridClusters.put(ncPath, cluster);
+            if (cluster == null) {
+              cluster = new LinkedList<>();
+              gridClusters.put(ncPath, cluster);
+            }
+            cluster.add(new SubTarget(helper, esid));
           }
-          cluster.add(esid);
         }
       }
     }
   }
 
 
+
   public void build() throws Exception {
-    initMaskArrays();
     initGridCluster();
     ArrayList<String> ncFiles = new ArrayList<>(gridClusters.keySet());
     Collections.sort(ncFiles);
@@ -165,6 +109,4 @@ public class DataSetBuilder {
       gridSetBuilder.build(ncFile);
     }
   }
-
-
 }

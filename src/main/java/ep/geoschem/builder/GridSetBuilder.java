@@ -1,6 +1,5 @@
 package ep.geoschem.builder;
 
-import javax.sound.midi.SysexMessage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,16 +19,12 @@ import org.stringtemplate.v4.ST;
 
 public class GridSetBuilder {
   static final Logger logger = LoggerFactory.getLogger(DataSetBuilder.class);
-
   DataSetBuilder parent;
-
   GCConfiguration conf;
-  Target target;
   GridSet gs;
 
   public GridSetBuilder(DataSetBuilder parent) {
     this.parent = parent;
-    this.target = parent.getTarget();
     this.conf = parent.getConf();
   }
 
@@ -40,20 +35,28 @@ public class GridSetBuilder {
 
 
   public void build(String ncFilename) throws Exception {
-    List<ESID> cluster = parent.getGridCluster(ncFilename);
+    List<SubTarget> cluster = parent.getGridCluster(ncFilename);
     Splitter splitter = Splitter.on("|||");
+    Target firstTarget = cluster.get(0).getTargetHelper().getTarget();
+
 
     logger.info("Generate:" + ncFilename);
     File file = new File(ncFilename);
     file.getParentFile().mkdirs();
 
-    gs = new GridSet(ncFilename, target.shape, target.clip);
+    gs = new GridSet(ncFilename, firstTarget.shape, firstTarget.clip);
     gs.open();
 
-    Map<String, ESID> subTasks = new HashMap<>();
+    Map<String, SubTarget> subTasks = new HashMap<>();
     GridBuilder gridBuilder = new GridBuilder(this);
 
-    for (ESID esid: cluster) {
+    // TODO check target shape
+    for (SubTarget subTarget: cluster) {
+      TargetHelper help = subTarget.getTargetHelper();
+
+      Target target = help.getTarget();
+      ESID esid = subTarget.getEsid();
+
       ST st = new ST(target.pathTemplate);
       st.add("cf", conf);
       st.add("ta", target);
@@ -61,9 +64,8 @@ public class GridSetBuilder {
 
       String fullPath = st.render();
       List<String> tokens = Lists.newArrayList(splitter.split(fullPath));
-      // String ncPath = tokens.get(0);
       String varName = tokens.get(1);
-      subTasks.put(varName, esid);
+      subTasks.put(varName, subTarget);
     }
 
     List<String> vars = new ArrayList<>(subTasks.keySet());

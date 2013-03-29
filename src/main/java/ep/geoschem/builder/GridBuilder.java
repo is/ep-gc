@@ -12,7 +12,6 @@ import ep.geoschem.Target;
 
 public class GridBuilder {
   GCConfiguration cf;
-  Target target;
 
   GridSetBuilder parent;
   DataSetBuilder root;
@@ -20,20 +19,25 @@ public class GridBuilder {
   public GridBuilder(GridSetBuilder parent) {
     this.parent = parent;
     this.root = parent.getParent();
-
     this.cf = root.getConf();
-    this.target = root.getTarget();
   }
 
-  public void build(GridSet gs, String varName, ESID esid) throws Exception {
+  public void build(GridSet gs, String varName, SubTarget sTarget) throws Exception {
+    TargetHelper helper = sTarget.getTargetHelper();
+    Target target = helper.getTarget();
     Grid resG = Grids.empty(target.shape);
+    ESID esid = sTarget.getEsid();
 
-    for (String sn : cf.emissions) {
-      if (target.enabledSet != null && !target.enabledSet.contains(sn)) {
-        continue;
-      }
+    String emissions[];
 
-      Grid maskArray = root.getMaskArray(sn);
+    if (target.zorder != null) {
+      emissions = target.zorder;
+    } else {
+      emissions = cf.zorder;
+    }
+
+    for (String sn : emissions) {
+      Grid maskArray = helper.getMaskArray(sn);
       String[] ss = cf.getSourceSectors(esid.species, esid.sector, sn);
 
       if (ss == null) {
