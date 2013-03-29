@@ -13,7 +13,7 @@ public class Main {
   public static void main(String argv[]) throws Exception {
     File cfFile;
     if (argv.length == 1) {
-      cfFile = new File("conf",  argv[0] + "-cfg.js");
+      cfFile = new File("conf", argv[0] + "-cfg.js");
     } else {
       cfFile = new File("conf", "cfg.js");
     }
@@ -33,9 +33,7 @@ public class Main {
   }
 
   public void run() throws Exception {
-    for (Target target: cf.targets) {
-      DataSetBuilder builder = new DataSetBuilder(cf, target);
-      builder.build();
-    }
+    DataSetBuilder builder = new DataSetBuilder(cf);
+    builder.build();
   }
 }
