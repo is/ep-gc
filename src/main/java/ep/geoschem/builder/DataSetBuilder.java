@@ -51,7 +51,7 @@ public class DataSetBuilder {
     for (Target target: this.targets) {
       TargetHelper helper = new TargetHelper(conf, target);
       helper.initMaskArrays();
-      helpers.add(new TargetHelper(conf, target));
+      helpers.add(helper);
     }
   }
 
