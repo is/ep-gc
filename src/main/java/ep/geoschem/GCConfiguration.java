@@ -61,6 +61,8 @@ public class GCConfiguration extends ep.common.Configuration{
 
   public String[] zorder;
 
+  public String[] directVocs;
+
   public static class SectorTable {
     public Map<String, String[]> sectors;
   }
@@ -248,6 +250,11 @@ public class GCConfiguration extends ep.common.Configuration{
       vocSpecies = new String[factor.vocs.size()];
       factor.vocs.toArray(vocSpecies);
     }
+
+    if (directVocs != null) {
+      factor.directVocs = Sets.newHashSet(directVocs);
+    }
+
     this.vocFactor = factor;
   }
 
@@ -258,41 +265,9 @@ public class GCConfiguration extends ep.common.Configuration{
     initEmissionSources();
     initSectorMapper();
     initYearIndex();
-
-//    setupEmissionMask();
   }
 
-//  private void setupEmissionMask() throws IOException {
-//    File emPath = getConfFile("emission.csv");
-//    if (!emPath.isFile())
-//      return;
-//
-//    MappingIterator<Map<String, String>> it = CsvUtil.read(emPath);
-//    HashSet<String> es = Sets.newHashSet(emissions);
-//    boolean dirty = false;
-//
-//    while(it.hasNext()) {
-//      Map<String, String> row = it.next();
-//      String sn = row.get("SOURCE");
-//      String en = row.get("ENABLE");
-//
-//      if (Strings.isNullOrEmpty(sn))
-//        continue;
-//
-//      if (!es.contains(sn))
-//        return;
-//
-//      if (en.equals("0") || en.equals("false")) {
-//        es.remove(sn);
-//        dirty = true;
-//      }
-//    }
-//
-//    if (dirty) {
-//      emissions = new String[es.size()];
-//      es.toArray(emissions);
-//    }
-//  }
+
 
 
   public Source getEmissionSource(String emission) {
@@ -304,10 +279,10 @@ public class GCConfiguration extends ep.common.Configuration{
     return yearIndex.get(emission + "," + year);
   }
 
+
   public String[] getSourceSectors(String species, String sector, String source) {
-    if (vocFactor.isVoc(species)) {
-      species = vocFactor.species;
-    }
+    if (vocFactor != null)
+    species = vocFactor.getRealSpeciesName(species, sector, source);
 
     String key = species + "," + sector;
     SectorTable st = sectorMapper.get(key);

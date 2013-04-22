@@ -18,6 +18,7 @@ public class VocFactor implements GridFactor {
   public Map<String, Float> vocMap;
   public Set<String> vocs;
   public String species;
+  public Set<String> directVocs;
 
   public void init(File fin) throws IOException {
     vocMap = new HashMap<>();
@@ -63,7 +64,24 @@ public class VocFactor implements GridFactor {
   }
 
 
-  public boolean isVoc(String s) {
-    return vocs.contains(s);
+  public String getRealSpeciesName(String species, String sector, String source) {
+    if (vocs.contains(species)) {
+      if (null != directVocs) {
+        String tokens[] = new String[] {
+          source, species, sector,
+          source + "." + species,
+          sector + "." + species,
+          source + "." + sector + "." + species
+        };
+
+        for (String token: tokens) {
+          if (directVocs.contains(token))
+            return species;
+        }
+      }
+      return this.species;
+    } else {
+      return species;
+    }
   }
 }

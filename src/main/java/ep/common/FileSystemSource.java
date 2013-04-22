@@ -58,11 +58,15 @@ public class FileSystemSource implements Source {
     }
 
     ESID oesid = esid;
-    boolean isVoc = cf.vocFactor.isVoc(esid.species);
+    boolean isVoc =  false;
 
-    if (isVoc) {
-      esid = new ESID(esid);
-      esid.species = cf.vocFactor.species;
+    if (cf.vocFactor != null) {
+      String s0 = cf.vocFactor.getRealSpeciesName(esid.species, esid.sector, esid.name);
+      if (!s0.equals(esid.species)) {
+        esid = new ESID(oesid);
+        esid.species = s0;
+        isVoc = true;
+      }
     }
 
     String arrayPath = randerPath(esid);
