@@ -1,10 +1,6 @@
-Emission Offline PreProcessor for GeosChem
+Emission PreProcessor for GeosChem
 ------------------------------------------
 
-
-Introduction
-------------
-EP-GC is Emission Offline PreProcessor for GeosChem.
 
 Requirements
 ------------
