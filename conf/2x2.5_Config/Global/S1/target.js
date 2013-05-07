@@ -1,7 +1,7 @@
 [
 {  "type" : "Target",
     "name" : "t2",
-    "shape" : [360,540],
+    "shape" : [90,144],
     "base" : "data/2",
     "beginDate" : "200801",
     "endDate" : "200812",
@@ -9,7 +9,7 @@
     "defaultEmission": "EDGAR",
     "timeScale" : "month",
     "species" : [ "SO2","NOx","CO","ACET","ALD2","ALK4","C2H6","C3H8","CH2O","MEK","PRPE"  ],
-    "clip" : { "bottom":0, "left": 0, "width":540, "height":360 }, 
+    "clip" : { "bottom":0, "left": 0, "width":144, "height":90 }, 
     "pathTemplate" : "<ta.base>/<es.name>/<es.date>.nc|||<es.species>_<es.sector>"
   }
 ]

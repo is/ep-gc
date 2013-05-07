@@ -20,7 +20,7 @@
       "type" : "fs",
       "basePath" : "data/2",
       "timeScale" : "year",
-      "name" : "TBond",
+      "name" : "SFactor_TBond",
       "mask": "<cf.up.root>/<es.name>/<es.name>_Map.nc|||<es.name>_Map",
       "pathTemplate" : "<cf.up.root>/<es.name>/<es.year>.nc|||<es.species>_<es.sector>"
     },
